@@ -14,7 +14,6 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardBox from "@/Components/CardBox.vue";
 
-import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import NavBar from "@/Layouts/NavBar.vue";
 
 const props = defineProps({
