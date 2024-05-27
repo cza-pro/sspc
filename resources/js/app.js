@@ -6,7 +6,7 @@ import { darkModeKey, styleKey } from "@/config.js";
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-// import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import Vue3Signature from "vue3-signature"
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
@@ -50,6 +50,7 @@ createInertiaApp({
       .use(pinia)
       .use(Vue3Signature)
       .use(CKEditor)
+      .use(ZiggyVue, Ziggy)
       .mount(el);
   },
   progress: {
