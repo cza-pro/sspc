@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Photo\IndexController as PhotoIndexController;
+use App\Http\Controllers\Admin\Selector\IndexController as SelectorIndexController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\Photo\IndexController;
 use Illuminate\Foundation\Application;
@@ -38,13 +39,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin/web.php';
 
-
-Route::get('/', IndexController::class)->name('photo.index');
-
-
-Route::middleware(['auth', 'admin'])->group(function(){
-
-    Route::get('admin/photo', PhotoIndexController::class)->name('admin.photo.index');
-
-});
