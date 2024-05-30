@@ -17,7 +17,9 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import toast from "@/Stores/toast";
 import CardBox from "@/Components/CardBox.vue";
+
 import MyNavBar from "./Components/MyNavBar.vue"
+import MySelector from "./Components/MySelector.vue"
 
 const props = defineProps({
   canLogin: {
@@ -53,4 +55,5 @@ const closeModal = () => {
 <template>
   <Head title="Nani" />
   <MyNavBar v-if="canLogin" />
+  <MySelector />
 </template>

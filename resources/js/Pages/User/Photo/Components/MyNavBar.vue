@@ -29,7 +29,7 @@ function logoutFunc() {
 </script>
 
 <template>
-  <div class="p-6 sm:fixed sm:top-0 nav-bar">
+  <div class="p-4 sm:top-0 nav-bar">
     <div class="menu-logo">
       <p class="logo-text">南一國中社會圖輯網</p>
       <input type="text" id="search-bar" name="searchword" class="search-box" placeholder="搜尋圖片名稱、知識主題">
