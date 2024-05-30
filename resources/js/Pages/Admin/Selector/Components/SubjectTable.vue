@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref ,reactive,onMounted} from 'vue';
 import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
 import Toggle from '@vueform/toggle';
@@ -33,6 +33,8 @@ const addForm = useForm({
 
 
 const isAddModalActive = ref(false);
+const isCloseModalActive = ref(false);
+const checkedSubject = ref([])
 
 const items = computed(() => props.items)
 
@@ -40,9 +42,17 @@ const confirmAdd = () => {
   isAddModalActive.value = true;
 }
 
+const confirmClose = () => {
+  isCloseModalActive.value = true;
+}
+
 
 const closeAddModal = () => {
   isAddModalActive.value = false;
+}
+
+const closeCloseModal = () => {
+  isCloseModalActive.value = false;
 }
 
 const addSubject = () => {
@@ -62,6 +72,29 @@ const addSubject = () => {
        closeAddModal()
     }
   })
+}
+
+
+const formData = reactive({
+  checkedSubject: checkedSubject
+})
+
+
+function closeAction() {
+    formData.checkedSubject = checkedSubject
+    router.post('/admin/subject/close', formData)
+    if (checkedSubject instanceof Set) {
+        checkedSubject.clear();
+    } else {
+        checkedSubject.value = [];
+    }
+    toast.add({
+        message: "Add !",
+        duration: 3000
+    });
+
+    closeCloseModal();
+
 }
 
 
@@ -92,6 +125,32 @@ const addSubject = () => {
     </div>
   </MediumCardBoxModal>
 
+
+<!--  Close Subject Modal -->
+  <MediumCardBoxModal v-model="isCloseModalActive" title="Close Subject">
+    <div class="mt-6">
+        <SecondaryButton @click="closeCloseModal"> Cancel </SecondaryButton>
+
+      <div class="mt-2">
+          <label for="batch_no" class="block mb-3 text-xs">Subject Name</label>
+          <div v-for="subject in props.subjects" :key="subject.id">
+
+            <input v-model="checkedSubject" :value="subject.id" type="checkbox" name="checkedSubject">
+            {{subject.name}}
+
+          </div>
+          <InputError :message="addForm.errors.name" class="mt-2" />
+      </div>
+    </div>
+    <div class="flex justify-end pt-6" v-if="checkedSubject.length > 0">
+          <PrimaryButton class="ml-3" @click="closeAction" :class="{ 'opacity-25': addForm.processing }" :disabled="addForm.processing">
+            Confirm
+          </PrimaryButton>
+    </div>
+  </MediumCardBoxModal>
+
+
+
   <CardBox has-table>
     <table class="text-xs bg-white rounded">
         <thead>
@@ -113,6 +172,14 @@ const addSubject = () => {
                     small
                     rounded-full
                     @click.prevent="confirmAdd"
+                />
+
+                  <BaseButton
+                    label="Close"
+                    color="contrast"
+                    small
+                    rounded-full
+                    @click.prevent="confirmClose"
                 />
             </tbody>
     </table>
