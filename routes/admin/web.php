@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Selector\IndexController as SelectorIndexControll
 use App\Http\Controllers\Admin\Subject\CreateController as SubjectCreateController;
 use App\Http\Controllers\Admin\Grade\CreateController as GradeCreateController;
 use App\Http\Controllers\Admin\Topic\CreateController as TopicCreateController;
+use App\Http\Controllers\Admin\Subject\CloseController as SubjectCloseController;
 use App\Http\Controllers\User\Photo\IndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,7 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::post('admin/subject/create', SubjectCreateController::class)->name('admin.subject.create');
     Route::post('admin/grade/create', GradeCreateController::class)->name('admin.grade.create');
     Route::post('admin/topic/create', TopicCreateController::class)->name('admin.topic.create');
+
+    Route::post('admin/subject/close', SubjectCloseController::class)->name('admin.subject.close');
 
 });

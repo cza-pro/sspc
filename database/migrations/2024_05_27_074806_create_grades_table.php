@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('available', ['on', 'off'])->default('on');
             $table->timestamps();
         });
     }
