@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import ImageModal from './ImageModal.vue';
 
 const activeNames = ref(['1', '2'])
 const checkList = ref([])
@@ -46,12 +47,25 @@ const handleChange = (val) => {
             
           </el-collapse-item>
         </el-collapse>
-
-        
       </div>
 
     </div>
-    <div class="home-right-component"></div>
+    <div class="home-right-component">
+      <div class="content-width">
+        <p class="right-title">
+          精選圖片
+        </p>
+        <div class="photo-block">
+          <div v-for="i in 14" :key="i" class="each-photo">
+            <!-- <img src="/images/photo1.png" alt="Filter" class="photo-img"> -->
+            <ImageModal
+              thumbnailSrc="/images/photo1.png"
+              fullImageSrc="/images/photo1.png"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style>
