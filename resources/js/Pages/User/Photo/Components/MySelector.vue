@@ -1,6 +1,14 @@
 <script setup>
 import { computed, ref } from "vue";
 import ImageModal from './ImageModal.vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  results: {
+    type: Array,
+    default: [],
+  },
+});
 
 const activeNames = ref(['1', '2'])
 const checkList = ref([])
@@ -55,14 +63,17 @@ const handleChange = (val) => {
         <p class="right-title">
           精選圖片
         </p>
-        <div class="photo-block">
-          <div v-for="i in 14" :key="i" class="each-photo">
+        <div v-if="results.length" class="photo-block">
+          <div v-for="photo in results" :key="photo" class="each-photo">
             <!-- <img src="/images/photo1.png" alt="Filter" class="photo-img"> -->
             <ImageModal
               thumbnailSrc="/images/photo1.png"
               fullImageSrc="/images/photo1.png"
             />
           </div>
+        </div>
+        <div v-else>
+          No data found
         </div>
       </div>
     </div>

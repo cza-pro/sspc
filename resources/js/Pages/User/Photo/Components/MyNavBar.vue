@@ -1,9 +1,105 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 // Defining primitive values with ref
 const loginState = ref(false);  // Similar to data { return { loginState: true } } in Vue 2
 const isDropdownVisible = ref(false);
+
+const results = ref([]);
+
+
+// Function to fetch results from the server
+const fetchResults = async (query) => {
+  // try {
+  //   const response = await axios.get('/api/search', {
+  //     params: { query }
+  //   });
+  //   results.value = response.data;
+  // } catch (error) {
+  //   console.error('Error fetching search results:', error);
+  // }
+};
+const photos = [
+  {
+    name: '1',
+    title: 'CZA',
+    content: 'Content for item 1',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '2',
+    title: 'TDA',
+    content: 'Content for item 2',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '3',
+    title: 'MMM',
+    content: 'Content for item 3',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '4',
+    title: 'MMLM',
+    content: 'Content for item 4',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '5',
+    title: 'KT',
+    content: 'Content for item 5',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '6',
+    title: 'KKAK',
+    content: 'Content for item 6',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '7',
+    title: 'KM',
+    content: 'Content for item 7',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '8',
+    title: 'MP',
+    content: 'Content for item 8',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '9',
+    title: 'SYA',
+    content: 'Content for item 9',
+    srcPath: '/images/download.png'
+  },
+];
+
+const props = defineProps(['initialQuery']);
+
+// Define a reactive reference for the search query
+const searchName = ref(props.initialQuery);
+
+
+// Define the emit function
+const emit = defineEmits(['update-search-query']);
+
+// Function to emit the search query to the parent
+const emitSearchQuery = () => {
+  // emit('update-search-query', searchName.value);
+  emit('update-search-query', photos);
+};
+
+
+// // Watch the search query for changes
+// watch(searchName, (newQuery) => {
+//   if (newQuery) {
+//     fetchResults(newQuery);
+//   } else {
+//     results.value = [];
+//   }
+// });
 
 // Define methods
 function loginFunc() {
@@ -32,7 +128,7 @@ function logoutFunc() {
   <div class="p-4 sm:top-0 nav-bar">
     <div class="menu-logo">
       <p class="logo-text">南一國中社會圖輯網</p>
-      <input type="text" id="search-bar" name="searchword" class="search-box" placeholder="搜尋圖片名稱、知識主題">
+      <input type="text" v-model="searchName" @input="emitSearchQuery" id="search-bar" name="searchword" class="search-box" placeholder="搜尋圖片名稱、知識主題">
     </div>
     
 

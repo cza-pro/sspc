@@ -49,11 +49,75 @@ const closeModal = () => {
   form.reset();
 };
 
+// Define reactive references for the search query and results
+// const searchName = ref('');
+const searchName = [
+  {
+    name: '1',
+    title: 'CZA',
+    content: 'Content for item 1',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '2',
+    title: 'TDA',
+    content: 'Content for item 2',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '3',
+    title: 'MMM',
+    content: 'Content for item 3',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '4',
+    title: 'MMLM',
+    content: 'Content for item 4',
+    srcPath: '/images/download.png'
+  },
+  {
+    name: '5',
+    title: 'KT',
+    content: 'Content for item 5',
+    srcPath: '/images/download.png'
+  }
+]
+const results = ref([]);
+const initialSearchQuery = ref('');
+
+
+// Function to handle the search query update from the child component
+const handleSearchQuery = async (query) => {
+  searchName.value = query;
+  console.log('hello data ', searchName.value)
+
+  if (query) {
+    // await fetchResults(query);
+  } else {
+    results.value = [];
+  }
+};
+console.log('hello data2 ', searchName)
+
+// // Function to fetch results from the server
+// const fetchResults = async (query) => {
+//   try {
+//     const response = await axios.get('/api/search', {
+//       params: { query }
+//     });
+//     results.value = response.data;
+//   } catch (error) {
+//     console.error('Error fetching search results:', error);
+//   }
+// };
+
 
 </script>
 
 <template>
   <Head title="Nani" />
-  <MyNavBar v-if="canLogin" />
-  <MySelector />
+  <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
+  {{searchName}}
+  <MySelector :results="searchName" />
 </template>
