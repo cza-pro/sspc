@@ -11,4 +11,8 @@ class Topic extends Model
 
     protected $fillable = ['name', 'available'];
 
+    public function photo()
+    {
+        return $this->HasMany(Photo::class);
+    }
 }
