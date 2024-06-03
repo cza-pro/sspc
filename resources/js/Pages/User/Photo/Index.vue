@@ -49,56 +49,104 @@ const closeModal = () => {
   form.reset();
 };
 
-// Define reactive references for the search query and results
-// const searchName = ref('');
-const searchName = [
+const results = ref([
   {
+    id: 1,
     name: '1',
     title: 'CZA',
     content: 'Content for item 1',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '2',
+    id: 2,
+    name: '1',
     title: 'TDA',
     content: 'Content for item 2',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '3',
+    id: 3,
+    name: '1',
     title: 'MMM',
     content: 'Content for item 3',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '4',
+    id: 4,
+    name: '1',
     title: 'MMLM',
     content: 'Content for item 4',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '5',
+    id: 5,
+    name: '1',
     title: 'KT',
     content: 'Content for item 5',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   }
-]
-const results = ref([]);
+]);
 const initialSearchQuery = ref('');
+const searchName = ref('');
 
 
 // Function to handle the search query update from the child component
 const handleSearchQuery = async (query) => {
-  searchName.value = query;
-  console.log('hello data ', searchName.value)
-
   if (query) {
     // await fetchResults(query);
+    searchName.value = query
+    results.value = results.value.filter(item => item.name.includes(query));
   } else {
-    results.value = [];
+    searchName.value = ''
+    results.value = [
+      {
+        id: 1,
+        name: '1',
+        title: 'CZA',
+        content: 'Content for item 1',
+        srcPath: '/images/photo1.png',
+        checkCondition: false
+      },
+      {
+        id: 2,
+        name: '1',
+        title: 'TDA',
+        content: 'Content for item 2',
+        srcPath: '/images/photo1.png',
+        checkCondition: false
+      },
+      {
+        id: 3,
+        name: '1',
+        title: 'MMM',
+        content: 'Content for item 3',
+        srcPath: '/images/photo1.png',
+        checkCondition: false
+      },
+      {
+        id: 4,
+        name: '1',
+        title: 'MMLM',
+        content: 'Content for item 4',
+        srcPath: '/images/photo1.png',
+        checkCondition: false
+      },
+      {
+        id: 5,
+        name: '1',
+        title: 'KT',
+        content: 'Content for item 5',
+        srcPath: '/images/photo1.png',
+        checkCondition: false
+      }
+    ];
   }
-};
-console.log('hello data2 ', searchName)
+}
 
 // // Function to fetch results from the server
 // const fetchResults = async (query) => {
@@ -118,6 +166,5 @@ console.log('hello data2 ', searchName)
 <template>
   <Head title="Nani" />
   <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
-  {{searchName}}
-  <MySelector :results="searchName" />
+  <MySelector :results="results" :searchName="searchName" />
 </template>
