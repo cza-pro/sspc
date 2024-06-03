@@ -1,13 +1,19 @@
 <script setup>
 import { computed, ref } from "vue";
 import ImageModal from './ImageModal.vue';
+import ImageModal1 from './ImageModal1.vue';
 import { defineProps } from 'vue';
 
+// Define props
 const props = defineProps({
   results: {
     type: Array,
-    default: [],
+    required: true
   },
+  searchName: {
+    type: String,
+    required: true
+  }
 });
 
 const activeNames = ref(['1', '2'])
@@ -59,21 +65,47 @@ const handleChange = (val) => {
 
     </div>
     <div class="home-right-component">
-      <div class="content-width">
+      <div v-if="results.length" class="content-width">
         <p class="right-title">
-          精選圖片
+          搜尋結果
         </p>
-        <div v-if="results.length" class="photo-block">
-          <div v-for="photo in results" :key="photo" class="each-photo">
-            <!-- <img src="/images/photo1.png" alt="Filter" class="photo-img"> -->
+        <div v-if="searchName && searchName !== ''">
+          <!-- <div v-for="photo in results" :key="photo" class="result-photo"> -->
             <ImageModal
               thumbnailSrc="/images/photo1.png"
               fullImageSrc="/images/photo1.png"
+              :photo="photo"
+              searchbar="true"
+              :results="results"
             />
-          </div>
+          <!-- </div> -->
         </div>
         <div v-else>
-          No data found
+          <!-- <div v-for="photo in results" :key="photo" class="each-photo"> -->
+            <ImageModal
+              thumbnailSrc="/images/photo1.png"
+              fullImageSrc="/images/photo1.png"
+              searchbar="false"
+              :results="results"
+            />
+          <!-- </div> -->
+        </div>
+      </div>
+      <div v-else class="content-width">
+        <p class="nodata-title">
+          查無此內容：OOXXOOXX
+        </p>
+        <p class="right-title">
+          精選圖片
+        </p>
+        <div class="photo-block">
+          <div v-for="i in 4" :key="i" class="each-photo">
+            <!-- <img src="/images/photo1.png" alt="Filter" class="photo-img"> -->
+            <ImageModal1
+              thumbnailSrc="/images/test-img.png"
+              fullImageSrc="/images/test-img.png"
+            />
+          </div>
         </div>
       </div>
     </div>

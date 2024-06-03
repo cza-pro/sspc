@@ -21,65 +21,48 @@ const fetchResults = async (query) => {
 };
 const photos = [
   {
+    id: 1,
     name: '1',
     title: 'CZA',
     content: 'Content for item 1',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '2',
+    id: 2,
+    name: '1',
     title: 'TDA',
     content: 'Content for item 2',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '3',
+    id: 3,
+    name: '1',
     title: 'MMM',
     content: 'Content for item 3',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '4',
+    id: 4,
+    name: '1',
     title: 'MMLM',
     content: 'Content for item 4',
-    srcPath: '/images/download.png'
+    srcPath: '/images/photo1.png',
+    checkCondition: false
   },
   {
-    name: '5',
+    id: 5,
+    name: '1',
     title: 'KT',
     content: 'Content for item 5',
-    srcPath: '/images/download.png'
-  },
-  {
-    name: '6',
-    title: 'KKAK',
-    content: 'Content for item 6',
-    srcPath: '/images/download.png'
-  },
-  {
-    name: '7',
-    title: 'KM',
-    content: 'Content for item 7',
-    srcPath: '/images/download.png'
-  },
-  {
-    name: '8',
-    title: 'MP',
-    content: 'Content for item 8',
-    srcPath: '/images/download.png'
-  },
-  {
-    name: '9',
-    title: 'SYA',
-    content: 'Content for item 9',
-    srcPath: '/images/download.png'
-  },
+    srcPath: '/images/photo1.png',
+    checkCondition: false
+  }
 ];
 
-const props = defineProps(['initialQuery']);
-
-// Define a reactive reference for the search query
-const searchName = ref(props.initialQuery);
+const searchName = ref('');
 
 
 // Define the emit function
@@ -87,8 +70,7 @@ const emit = defineEmits(['update-search-query']);
 
 // Function to emit the search query to the parent
 const emitSearchQuery = () => {
-  // emit('update-search-query', searchName.value);
-  emit('update-search-query', photos);
+  emit('update-search-query', searchName.value);
 };
 
 
