@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\Topic\CreateController as TopicCreateController;
 use App\Http\Controllers\Admin\Subject\CloseController as SubjectCloseController;
 use App\Http\Controllers\Admin\Grade\CloseController as GradeCloseController;
 use App\Http\Controllers\Admin\Topic\CloseController as TopicCloseController;
+use App\Http\Controllers\Admin\FeatureImage\IndexController as FeatureImageIndexController;
+use App\Http\Controllers\Admin\FeatureImage\CreateController as FeatureImageCreateController;
 use App\Http\Controllers\User\Photo\IndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +33,7 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::post('admin/grade/close', GradeCloseController::class)->name('admin.grade.close');
     Route::post('admin/topic/close', TopicCloseController::class)->name('admin.topic.close');
 
+
+    Route::get('admin/feature-image', FeatureImageIndexController::class)->name('admin.feature_image.index');
+    Route::post('admin/feature-image/create', FeatureImageCreateController::class)->name('admin.feature_image.create');
 });
