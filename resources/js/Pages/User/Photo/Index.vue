@@ -19,7 +19,8 @@ import toast from "@/Stores/toast";
 import CardBox from "@/Components/CardBox.vue";
 
 import MyNavBar from "./Components/MyNavBar.vue"
-import MySelector from "./Components/MySelector.vue"
+import MySelector from "../../../Components/MySelector.vue"
+import PhotoContent from '../../../Components/PhotoContent.vue'
 
 const props = defineProps({
   canLogin: {
@@ -166,5 +167,8 @@ const handleSearchQuery = async (query) => {
 <template>
   <Head title="Nani" />
   <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
-  <MySelector :results="results" :searchName="searchName" />
+  <div class="home-content">
+    <MySelector :results="results" :searchName="searchName" />
+    <PhotoContent :results="results" :searchName="searchName" />
+  </div>
 </template>
