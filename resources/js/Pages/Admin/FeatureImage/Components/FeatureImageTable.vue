@@ -1,0 +1,69 @@
+<script setup>
+import { computed, ref ,reactive,onMounted} from 'vue';
+import toast from '@/Stores/toast';
+import { mdiShape } from '@mdi/js';
+import Toggle from '@vueform/toggle';
+import VueMultiselect from 'vue-multiselect';
+import CardBox from '@/Components/CardBox.vue';
+import TextInput from '@/Components/TextInput.vue';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import BaseButton from '@/Components/BaseButton.vue';
+import InputError from '@/Components/InputError.vue';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
+import CardBoxModal from '@/Components/CardBoxModal.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import PaginationLinks from '@/Components/PaginationLinks.vue';
+import MediumCardBoxModal from '@/Components/MediumCardBoxModal.vue';
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue';
+import { faL } from '@fortawesome/free-solid-svg-icons';
+
+const props = defineProps({
+
+  feature_images: {
+    type: Object,
+    default: {}
+  }
+
+})
+
+</script>
+
+<template>
+
+
+  <CardBox has-table>
+    <p>feature_image</p>
+    <table class="text-xs bg-white rounded">
+        <thead>
+            <tr>
+                <th class="text-left">စဥ်</th>
+                <th class="text-left">အမည်</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            <tr v-for="(feature_image, index) in props.feature_images" :key="feature_image.id">
+                <td class="text-left">{{ index + 1}}</td>
+                <td class="text-left" :class="feature_image.public === 'off' ? 'text-disable' : ''">{{ feature_image.name }}</td>
+                <img
+                    :src="feature_image.feature_photo_url"
+                    class="w-10 h-10 mx-auto"
+                    alt="feature image"
+                />
+
+              </tr>
+
+            </tbody>
+    </table>
+  </CardBox>
+
+</template>
+
+<style scoped>
+.text-disable {
+    color: red;
+}
+</style>
+<style src="@vueform/toggle/themes/default.css"></style>
