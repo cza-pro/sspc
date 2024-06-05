@@ -152,6 +152,7 @@ function closeAction() {
 
 
   <CardBox has-table>
+    <p>subject</p>
     <table class="text-xs bg-white rounded">
         <thead>
             <tr>
@@ -160,10 +161,9 @@ function closeAction() {
             </tr>
         </thead>
         <tbody>
-            <!-- sss => {{subjects}} -->
             <tr v-for="(subject, index) in props.subjects" :key="subject.id">
                 <td class="text-left">{{ index + 1}}</td>
-                <td class="text-left">{{ subject.name }}</td>
+                <td class="text-left" :class="subject.available === 'off' ? 'text-disable' : ''">{{ subject.name }}</td>
               </tr>
 
                 <BaseButton
@@ -187,4 +187,9 @@ function closeAction() {
 
 </template>
 
+<style scoped>
+.text-disable {
+    color: red;
+}
+</style>
 <style src="@vueform/toggle/themes/default.css"></style>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref ,reactive, onMounted} from 'vue';
 import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
 import Toggle from '@vueform/toggle';
@@ -33,6 +33,8 @@ const addForm = useForm({
 
 
 const isAddModalActive = ref(false);
+const isCloseModalActive = ref(false);
+const checkedGrade = ref([])
 
 const items = computed(() => props.items)
 
@@ -43,6 +45,15 @@ const confirmAdd = () => {
 
 const closeAddModal = () => {
   isAddModalActive.value = false;
+}
+
+const confirmClose = () => {
+  isCloseModalActive.value = true;
+}
+
+
+const closeCloseModal = () => {
+  isCloseModalActive.value = false;
 }
 
 const addGrade = () => {
@@ -65,6 +76,28 @@ const addGrade = () => {
 }
 
 
+
+const formData = reactive({
+  checkedGrade: checkedGrade
+})
+
+
+function closeAction() {
+    formData.checkedGrade = checkedGrade
+    router.post('/admin/grade/close', formData)
+    if (checkedGrade instanceof Set) {
+        checkedGrade.clear();
+    } else {
+        checkedGrade.value = [];
+    }
+    toast.add({
+        message: "Add !",
+        duration: 3000
+    });
+
+    closeCloseModal();
+
+}
 
 </script>
 
@@ -92,6 +125,32 @@ const addGrade = () => {
     </div>
   </MediumCardBoxModal>
 
+
+  <!--  Close Grade Modal -->
+  <MediumCardBoxModal v-model="isCloseModalActive" title="Close Subject">
+    <div class="mt-6">
+        <SecondaryButton @click="closeCloseModal"> Cancel </SecondaryButton>
+
+      <div class="mt-2">
+          <label for="batch_no" class="block mb-3 text-xs">Grade Name</label>
+          <div v-for="grade in props.grades" :key="grade.id">
+
+            <input v-model="checkedGrade" :value="grade.id" type="checkbox" name="checkedGrade">
+            {{grade.name}}
+
+          </div>
+          <InputError :message="addForm.errors.name" class="mt-2" />
+      </div>
+    </div>
+    <div class="flex justify-end pt-6" v-if="checkedGrade.length > 0">
+          <PrimaryButton class="ml-3" @click="closeAction" :class="{ 'opacity-25': addForm.processing }" :disabled="addForm.processing">
+            Confirm
+          </PrimaryButton>
+    </div>
+  </MediumCardBoxModal>
+
+
+<p>Grade</p>
   <CardBox has-table>
     <table class="text-xs bg-white rounded">
         <thead>
@@ -113,6 +172,14 @@ const addGrade = () => {
                     small
                     rounded-full
                     @click.prevent="confirmAdd"
+                />
+
+                <BaseButton
+                    label="Close"
+                    color="contrast"
+                    small
+                    rounded-full
+                    @click.prevent="confirmClose"
                 />
             </tbody>
     </table>
