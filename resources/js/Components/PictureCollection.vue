@@ -47,6 +47,7 @@ const manageFunc = (val) => {
   .picture-collection {
     border: 1px solid #D7D7D7;
     padding: 1rem;
+    border-radius: 6px;
     .collection-title {
       font-weight: 700;
       font-size: 20px;

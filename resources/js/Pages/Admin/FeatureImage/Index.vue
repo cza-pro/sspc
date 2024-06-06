@@ -86,7 +86,7 @@ const createFeatureImageFunc = () => {
 </script>
 
 <template>
-  <!-- <Head title="Feature Image" /> -->
+  <Head title="Feature" />
 
      <!-- <SectionMain> -->
 
