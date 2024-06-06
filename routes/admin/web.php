@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\Grade\CloseController as GradeCloseController;
 use App\Http\Controllers\Admin\Topic\CloseController as TopicCloseController;
 use App\Http\Controllers\Admin\FeatureImage\IndexController as FeatureImageIndexController;
 use App\Http\Controllers\Admin\FeatureImage\CreateController as FeatureImageCreateController;
+use App\Http\Controllers\Admin\FeatureImage\RemoveController as FeatureImageRemoveController;
+use App\Http\Controllers\Admin\FeatureImage\DeleteController as FeatureImageDeleteController;
 use App\Http\Controllers\User\Photo\IndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +38,7 @@ Route::middleware(['auth', 'admin'])->group(function(){
 
     Route::get('admin/feature-image', FeatureImageIndexController::class)->name('admin.feature_image.index');
     Route::post('admin/feature-image/create', FeatureImageCreateController::class)->name('admin.feature_image.create');
+    Route::post('admin/feature-image/remove/{feature_image}', FeatureImageRemoveController::class)->name('admin.feature_image.remove');
+    Route::delete('admin/feature-image/delete/{feature_image}', FeatureImageDeleteController::class)->name('admin.feature_image.delete');
+
 });
