@@ -22,6 +22,25 @@ const props = defineProps({
   },
 });
 
+const fname = ref("");
+const photoEditModal = ref(false);
+const photoDeleteModal = ref(false);
+const closeEdit = () => {
+  photoEditModal.value = false;
+};
+const closeDelete = () => {
+  photoDeleteModal.value = false;
+};
+
+const deleteFunc = () => {
+  console.log('Deleted')
+  closeDelete();
+};
+const cancelFunc = () => {
+  console.log('Cancel')
+  closeDelete();
+};
+
 const statusRef = ref("");
 const results = ref([
   {
@@ -68,6 +87,67 @@ const results = ref([
 const initialSearchQuery = ref('');
 const searchName = ref('');
 
+const subjects = ref('')
+const grade = ref('')
+const knowledgeTopic = ref('')
+const photoType = ref('')
+
+const suboptions = [
+  {
+    value: 'Subject1',
+    label: 'Subject1',
+  },
+  {
+    value: 'Subject2',
+    label: 'Subject2',
+  },
+  {
+    value: 'Subject3',
+    label: 'Subject3',
+  }
+]
+const gradeoptions = [
+  {
+    value: 'Grade1',
+    label: 'Grade1',
+  },
+  {
+    value: 'Grade2',
+    label: 'Grade2',
+  },
+  {
+    value: 'Grade3',
+    label: 'Grade3',
+  }
+]
+const topicoptions = [
+  {
+    value: 'topic1',
+    label: 'topic1',
+  },
+  {
+    value: 'topic2',
+    label: 'topic2',
+  },
+  {
+    value: 'topic3',
+    label: 'topic3',
+  }
+]
+const typeoptions = [
+  {
+    value: 'type1',
+    label: 'type1',
+  },
+  {
+    value: 'type2',
+    label: 'type2',
+  },
+  {
+    value: 'type3',
+    label: 'type3',
+  }
+]
 
 </script>
 
@@ -122,18 +202,126 @@ const searchName = ref('');
             </div>
             <div class="row-data">
               <div class="btn-row">
-                <p class="btn-one">編輯</p>
+                <p class="btn-one" @click="photoEditModal = true">編輯</p>
                 <p class="btn-two">下架</p>
-                <p class="btn-three">刪除</p>
+                <p class="btn-three" @click="photoDeleteModal = true">刪除</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div v-if="photoEditModal" class="modal">
+      <div class="modal-confirm-content">
+        <span class="confirmation-close" @click="closeEdit">&times;</span>
+        <img src="/images/photo1.png" alt="upload" class="modal-photo">
+        <p class="fname">圖片名稱</p>
+        <input type="text" v-model="fname" id="fname" name="fname" class="inputname" placeholder="Name of the photo">
+        <div class="selection-block">
+          <el-select
+            v-model="subjects"
+            placeholder="科目"
+            size="large"
+            style="width: 240px"
+            class="elselectwrapper1"
+          >
+            <el-option
+              v-for="item in suboptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="grade"
+            placeholder="年級"
+            size="large"
+            style="width: 240px"
+            class="elselectwrapper2"
+          >
+            <el-option
+              v-for="item in gradeoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div class="selection-block">
+          <el-select
+            v-model="knowledgeTopic"
+            placeholder="知識主題"
+            size="large"
+            style="width: 240px"
+            class="elselectwrapper1"
+          >
+            <el-option
+              v-for="item in topicoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="photoType"
+            placeholder="圖片類型"
+            size="large"
+            style="width: 240px"
+            class="elselectwrapper2"
+          >
+            <el-option
+              v-for="item in typeoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div class="photoinfo">
+          <p>圖片格式：JPG</p>
+          <p>圖片尺寸：300x140</p>
+          <p>圖片流水號：32130026412320</p>
+        </div>
+      </div>
+    </div>
+    <div v-if="photoDeleteModal" class="modal">
+      <div class="modal-confirm-content">
+        <span class="confirmation-close" @click="closeDelete">&times;</span>
+        <p class="confirm-text">確定刪除”圖片名稱”？</p>
+        <button @click="deleteFunc" class="delete-button">刪除</button>
+        <button @click="cancelFunc" class="cancel-button">取消</button>
+      </div>
+    </div>
   </div>
 </template>
-<style lang="scss" scopee>
+<style>
+  .elselectwrapper1 .el-select__wrapper {
+    border: 0 solid red !important;
+  }
+  .elselectwrapper2 .el-select__wrapper {
+    border: 0 solid red !important;
+  }
+
+  .el-select__suffix {
+    background-image: url('/images/admin/admin-dd.png');
+    background-size: 100% 100%;
+    width: 20px; /* Adjust icon size as needed */
+    height: 10px;
+  }
+  .el-select__caret {
+    display: none;
+  }
+  .el-select__placeholder {
+    font-weight: 400;
+    font-size: 20px;
+    color: #000 !important;
+  }
+  .el-select {
+    width: 50% !important;
+    margin: 0;
+  }
+</style>
+<style lang="scss" scoped>
   .photo-content {
     display: flex;
     max-width: 1200px;
@@ -240,5 +428,122 @@ const searchName = ref('');
         
       }
     }
+  }
+  .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px); /* Apply blur effect */
+  }
+  .modal-confirm-content {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+
+    text-align: center;
+    background: #F6C791;
+    border-radius: 12px;
+    padding: 2.2rem 2rem 1.3rem;
+  }
+  .confirmation-close {
+    position: absolute;
+    top: -6px;
+    right: 13px;
+    color: #FFF;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  .confirmation-close:hover,
+  .confirmation-close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .confirm-text {
+    font-weight: 400;
+    font-size: 24px;
+    color: #392F26;
+  } 
+  .delete-button, .cancel-button {
+    margin-top: 25px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    width: 100px;
+    height: 48px;
+    line-height: 24px;
+    font-weight: 400;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .delete-button {
+    background: #FF5F5F;
+    margin-right: 12px;
+  }
+  .cancel-button {
+    background-color: #181818;
+    margin-left: 12px;
+  }
+  .modal-photo {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+  }
+  .fname {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #392F26;
+    text-align: left;
+    margin: 1rem 0 3px;
+  }
+  .inputname {
+    border: none;
+    border-radius: 6px;
+    width: 100%;
+  }
+  .inputname::-ms-input-placeholder { /* Edge 12-18 */
+    font-weight: 400;
+    font-size: 20px;
+    color: #392F26;
+  }
+
+  .inputname::placeholder {
+    font-weight: 400;
+    font-size: 20px;
+    color: #392F26;
+  }
+  .selection-block {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  .photoinfo {
+    font-weight: 400;
+    font-size: 16px;
+    color: #392F26;
+
+    text-align: left;
+    margin-top: 3rem;
+  }
+  .elselectwrapper1, .elselectwrapper2 {
+    width: 150px !important;
+    border-radius: 14px;
+  }
+  .elselectwrapper1 {
+    margin-right: 5px;
+  }
+  .elselectwrapper2 {
+    margin-left: 5px;
   }
 </style>
