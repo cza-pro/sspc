@@ -30,8 +30,8 @@ const statusRef = ref("");
     <p class="collection-title">南一國中社會圖輯網</p>
     <div class="btn-block">
       <p class="picture-management activecss">圖片管理</p>
-      <p class="picture-management">精選圖片管理</p>
-      <p class="picture-management">編輯篩選器</p>
+      <a href="/admin/feature-image"><p class="picture-management">精選圖片管理</p></a>
+      <a href="/admin/selector"><p class="picture-management">編輯篩選器</p></a>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ const statusRef = ref("");
     }
     .btn-block {
       padding-top: 1rem;
-      
+
       .picture-management, .feature-management, .filter-management {
         font-weight: 400;
         font-size: 20px;
