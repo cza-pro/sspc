@@ -25,6 +25,7 @@ class CreateController extends Controller
             $feature_image->update(['photo_url' => $category_image_path]);
         }
 
+
         return to_route('admin.feature_image.index')->with('toast', 'Feature Image Create !');
 
     }

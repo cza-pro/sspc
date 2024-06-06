@@ -36,11 +36,17 @@ const isLoading = ref(false);
 const confirmAdd = () => {
   isAddModalActive.value = true;
    addForm.reset();
+
 }
 
 
 const closeAddModal = () => {
   isAddModalActive.value = false;
+}
+
+
+const closeCloseModal = () => {
+  isCloseModalActive.value = false;
 }
 
 
@@ -85,6 +91,8 @@ const createFeature = () => {
 
                 <InputError :message="addForm.errors.feature_image" class="mt-2" />
             </div>
+
+
             <div class="flex justify-end pt-6">
                 <SecondaryButton @click="closeAddModal"> Cancel </SecondaryButton>
                 <PrimaryButton class="ml-3" @click="createFeature" :class="{ 'opacity-25': addForm.processing }" :disabled="addForm.processing">

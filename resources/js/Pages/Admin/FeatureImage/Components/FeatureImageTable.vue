@@ -26,6 +26,7 @@ const props = defineProps({
   }
 
 })
+
 const removeFeatureImage = (feature_image) => {
     console.log(feature_image);
   router.post(
@@ -78,6 +79,8 @@ const deleteFeatureImage = (feature_image) => {
     <table class="text-xs bg-white rounded">
         <thead>
             <tr>
+                <th class="text-left">စဥ်</th>
+                <th class="text-left">အမည်</th>
                 <th class="text-left">No</th>
                 <th class="text-left">Name</th>
                 <th class="text-left">Photo Type</th>
@@ -97,6 +100,7 @@ const deleteFeatureImage = (feature_image) => {
                     class="w-10 h-10 mx-auto"
                     alt="feature image"
                 />
+
                 <td>
                    <PrimaryButton class="ml-3" @click="removeFeatureImage(feature_image.id)">
                         Remove
