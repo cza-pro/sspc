@@ -108,6 +108,7 @@ const initialSearchQuery = ref('');
 const searchName = ref('');
 
 const subjects = ref('')
+const newGrade = ref('四年級')
 const grade = ref('')
 const knowledgeTopic = ref('')
 const photoType = ref('')
@@ -526,13 +527,15 @@ const removeItemsFunc = () => {
       </div>
     </div>
     <div v-if="addNewLabel" class="modal">
-      <div class="modal-confirm-content">
+      <div class="modal-newgrade-content">
         <span class="confirmation-close" @click="closeNewLbl">&times;</span>
-        <p class="fname">檔案名稱：</p>
+        <p class="grade-text">新增標籤：年級選擇</p>
         <div class="file-div">
-          <p class="selectFile">選擇檔案</p>
+          <input type="text" v-model="newGrade" id="newGrade" name="newGrade" class="gradecss" placeholder="Name of the photo">
         </div>
-        <p class="fname">圖片名稱</p>
+        <div class="btn-btn">
+          <p class="grade-btn">確認新增</p>
+        </div>
       </div>
     </div>
   </div>
@@ -802,7 +805,7 @@ const removeItemsFunc = () => {
     height: 100%;
     overflow: auto;
   }
-  .modal-confirm-content, .modal-closelbl-content {
+  .modal-confirm-content, .modal-closelbl-content, .modal-newgrade-content {
     position: relative;
     background-color: #fff;
     padding: 20px;
@@ -822,6 +825,11 @@ const removeItemsFunc = () => {
     width: 727px;
     height: 290px;
   }
+  .modal-newgrade-content {
+    padding-top: 10px;
+    width: 570px;
+    height: 290px;
+  }
   .confirmation-close {
     position: absolute;
     top: -6px;
@@ -835,6 +843,27 @@ const removeItemsFunc = () => {
     color: #bbb;
     text-decoration: none;
     cursor: pointer;
+  }
+  .grade-text {
+    font-weight: 700;
+    font-size: 20px;
+    color: #392F26;
+    margin-bottom: 4rem;
+  }
+  .btn-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 6rem;
+  }
+  .grade-btn {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #FFF;
+    width: 135px;
+    height: 36px;
+    line-height: 36px;
+    background: #000;
+    border-radius: 6px;
   }
   .confirm-text, .closelbl-text {
     font-weight: 400;
@@ -931,6 +960,14 @@ const removeItemsFunc = () => {
   .file-div {
     display: flex;
     justify-content: center;
+    .gradecss {
+      height: 36px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 400;
+      font-size: 20px;
+      color: #392F26;
+    }
   }
   .selectFile, .select1File {
     font-weight: 700;
