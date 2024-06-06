@@ -26,6 +26,47 @@ const props = defineProps({
   }
 
 })
+const removeFeatureImage = (feature_image) => {
+    console.log(feature_image);
+  router.post(
+    route("admin.feature_image.remove", {
+      feature_image: feature_image,
+    }),
+    {
+      onSuccess: () => {
+          toast.add({
+            message: "Remove Feature Image!",
+        })
+      },
+      onError: () => {
+        toast.add({
+          message: "Remove failed !",
+        });
+      },
+    }
+  );
+};
+
+const deleteFeatureImage = (feature_image) => {
+    console.log(feature_image);
+  router.delete(
+    route("admin.feature_image.delete", {
+      feature_image: feature_image,
+    }),
+    {
+      onSuccess: () => {
+          toast.add({
+            message: "Remove Feature Image!",
+        })
+      },
+      onError: () => {
+        toast.add({
+          message: "Remove failed !",
+        });
+      },
+    }
+  );
+};
 
 </script>
 
@@ -37,8 +78,10 @@ const props = defineProps({
     <table class="text-xs bg-white rounded">
         <thead>
             <tr>
-                <th class="text-left">စဥ်</th>
-                <th class="text-left">အမည်</th>
+                <th class="text-left">No</th>
+                <th class="text-left">Name</th>
+                <th class="text-left">Photo Type</th>
+                <th class="text-left">Photo Size</th>
             </tr>
         </thead>
         <tbody>
@@ -46,12 +89,23 @@ const props = defineProps({
 
             <tr v-for="(feature_image, index) in props.feature_images" :key="feature_image.id">
                 <td class="text-left">{{ index + 1}}</td>
-                <td class="text-left" :class="feature_image.public === 'off' ? 'text-disable' : ''">{{ feature_image.name }}</td>
+                <td class="text-left">{{ feature_image.name }}</td>
+                <td class="text-left">{{ feature_image.photo_type }}</td>
+                <td class="text-left">{{ feature_image.photo_size }}</td>
                 <img
                     :src="feature_image.feature_photo_url"
                     class="w-10 h-10 mx-auto"
                     alt="feature image"
                 />
+                <td>
+                   <PrimaryButton class="ml-3" @click="removeFeatureImage(feature_image.id)">
+                        Remove
+                    </PrimaryButton>
+
+                   <PrimaryButton class="ml-3" @click="deleteFeatureImage(feature_image.id)">
+                        Delete
+                    </PrimaryButton>
+                </td>
 
               </tr>
 
