@@ -38,6 +38,7 @@ const manageFunc = (val) => {
       <p @click="manageFunc('pictureManage')" :class="currentTab == 'pictureManage' ? 'activecss' : ''" class="picture-management">圖片管理</p>
       <p @click="manageFunc('featureImage')" :class="currentTab == 'featureImage' ? 'activecss' : ''" class="picture-management">精選圖片管理</p>
       <p @click="manageFunc('editFilter')" :class="currentTab == 'editFilter' ? 'activecss' : ''" class="picture-management">編輯篩選器</p>
+
     </div>
   </div>
 </template>
@@ -54,7 +55,6 @@ const manageFunc = (val) => {
     }
     .btn-block {
       padding-top: 1rem;
-      
       .picture-management {
         font-weight: 400;
         font-size: 20px;

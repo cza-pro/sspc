@@ -26,7 +26,6 @@ const props = defineProps({
 })
 
 const addForm = useForm({
-  name: '',
   feature_image: ''
 });
 
@@ -36,6 +35,8 @@ const isLoading = ref(false);
 
 const confirmAdd = () => {
   isAddModalActive.value = true;
+   addForm.reset();
+
 }
 
 
@@ -43,9 +44,11 @@ const closeAddModal = () => {
   isAddModalActive.value = false;
 }
 
+
 const closeCloseModal = () => {
   isCloseModalActive.value = false;
 }
+
 
 const createFeature = () => {
   addForm.post(route('admin.feature_image.create'), {
@@ -56,6 +59,7 @@ const createFeature = () => {
     },
     onSuccess: () => {
        closeAddModal();
+        addForm.reset();
        toast.add({
           message: usePage().props.toast.message
        });
@@ -80,25 +84,15 @@ const createFeature = () => {
 
     <!-- Create Subject Modal Box -->
         <MediumCardBoxModal v-model="isAddModalActive" title="Add Subject">
-            <div class="mt-6">
-            <div class="mt-2">
-                <label for="batch_no" class="block mb-3 text-xs">Feature Image</label>
-                <TextInput
-                    id="name"
-                    v-model="addForm.name"
-                    type="text"
-                    class="block w-full mt-1 form-input placeholder:text-xs"
-                    placeholder="Feature Name"
-                />
-                <InputError :message="addForm.errors.name" class="mt-2" />
-            </div>
+
             <div class="mt-6">
                 <InputLabel for="feature_image" value="Feature Image" />
                 <input type="file" @input="addForm.feature_image = $event.target.files[0]" />
 
                 <InputError :message="addForm.errors.feature_image" class="mt-2" />
             </div>
-            </div>
+
+
             <div class="flex justify-end pt-6">
                 <SecondaryButton @click="closeAddModal"> Cancel </SecondaryButton>
                 <PrimaryButton class="ml-3" @click="createFeature" :class="{ 'opacity-25': addForm.processing }" :disabled="addForm.processing">
