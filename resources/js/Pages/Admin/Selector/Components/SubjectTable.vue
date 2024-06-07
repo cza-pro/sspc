@@ -2,20 +2,7 @@
 import { computed, ref ,reactive,onMounted} from 'vue';
 import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
-import Toggle from '@vueform/toggle';
-import VueMultiselect from 'vue-multiselect';
-import CardBox from '@/Components/CardBox.vue';
-import TextInput from '@/Components/TextInput.vue';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import BaseButton from '@/Components/BaseButton.vue';
-import InputError from '@/Components/InputError.vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
-import CardBoxModal from '@/Components/CardBoxModal.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import PaginationLinks from '@/Components/PaginationLinks.vue';
-import MediumCardBoxModal from '@/Components/MediumCardBoxModal.vue';
-import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const props = defineProps({
@@ -28,7 +15,25 @@ const addForm = useForm({
   name: '四年級'
 });
 const checkedSubject = ref([])
+const addNewLabel = ref(false);
+const toRemoveItem = ref([]);
+const photoRemoveModal = ref(false);
+const tempSubjects = ref([]); // Create a local copy of props.subjects
+
+const formData = reactive({
+  checkedSubject: checkedSubject
+})
+
 const items = computed(() => props.items)
+
+onMounted(() => {
+  console.log('Subject is mounted');
+  // Make a deep copy of props.subjects if tempSubjects is empty
+  if (tempSubjects.value.length === 0) {
+    tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
+    console.log(tempSubjects.value);
+  }
+});
 
 const addSubject = () => {
   addForm.post(route('admin.subject.create'), {
@@ -49,13 +54,23 @@ const addSubject = () => {
   })
 }
 
-const formData = reactive({
-  checkedSubject: checkedSubject
-})
+function removeItemsFunc() {
+  // formData.checkedSubject = checkedSubject
+  formData.checkedSubject = toRemoveItem
+  router.post('/admin/subject/close', formData)
+  if (checkedSubject instanceof Set) {
+      checkedSubject.clear();
+  } else {
+      checkedSubject.value = [];
+  }
+  toast.add({
+      message: "Add !",
+      duration: 3000
+  });
+  tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
+  closeRemove();
+}
 
-const addNewLabel = ref(false);
-const toRemoveItem = ref([]);
-const photoRemoveModal = ref(false);
 const closeNewLbl = () => {
   addNewLabel.value = false;
 };
@@ -63,7 +78,6 @@ const closeRemove = () => {
   photoRemoveModal.value = false;
 };
 
-const tempSubjects = ref([]); // Create a local copy of props.subjects
 const lblToRemoveFunc = (val) => {
   // Modify the local copy
   tempSubjects.value.forEach(item => {
@@ -78,38 +92,10 @@ const lblToRemoveFunc = (val) => {
     toRemoveItem.value.splice(toRemoveItem.value.indexOf(val.id), 1);
   }
 };
-
-function removeItemsFunc() {
-    // formData.checkedSubject = checkedSubject
-    formData.checkedSubject = toRemoveItem
-    router.post('/admin/subject/close', formData)
-    if (checkedSubject instanceof Set) {
-        checkedSubject.clear();
-    } else {
-        checkedSubject.value = [];
-    }
-    toast.add({
-        message: "Add !",
-        duration: 3000
-    });
-    tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
-    closeRemove();
-
-}
-
-onMounted(() => {
-  console.log('Component is mounted');
-  // Make a deep copy of props.subjects if tempSubjects is empty
-  if (tempSubjects.value.length === 0) {
-    tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
-    console.log(tempSubjects.value);
-  }
-});
 </script>
 
 <template>
 
-  <!-- {{ props.subjects }} -->
   <div class="filter-block">
     <div class="filter-left">
       <p class="subject-section">科目選擇</p>
@@ -358,6 +344,7 @@ onMounted(() => {
           margin-left: 8px;
           margin-right: 8px;
           margin-bottom: 1.3rem;
+          cursor: pointer;
         }
         .each1-btn:nth-child(5n) {
           margin-right: 1rem;
@@ -413,4 +400,3 @@ onMounted(() => {
     background: #000;
   }
 </style>
-<style src="@vueform/toggle/themes/default.css"></style>
