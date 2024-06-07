@@ -92,7 +92,7 @@ function removeItemsFunc() {
         message: "Add !",
         duration: 3000
     });
-
+    tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
     closeRemove();
 
 }
@@ -109,7 +109,7 @@ onMounted(() => {
 
 <template>
 
-  {{ props.subjects }}
+  <!-- {{ props.subjects }} -->
   <div class="filter-block">
     <div class="filter-left">
       <p class="subject-section">科目選擇</p>
