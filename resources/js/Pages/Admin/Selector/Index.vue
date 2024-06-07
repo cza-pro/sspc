@@ -87,35 +87,12 @@ const grade = ref('')
         <SubjectTable
           :subjects="props.subjects"
         />
-
-        <div class="filter-block">
-          <div class="filter-left">
-            <p class="subject-section">年級選擇</p>
-            <div class="subject-btns">
-              <p class="each-btn">一年級</p>
-              <p class="each-btn">二年級</p>
-              <p class="each-btn">三年級</p>
-            </div>
-          </div>
-          <div class="filter-right">
-            <p class="addnewtag">新增標籤</p>
-            <p class="closetag">關閉標籤</p>
-          </div>
-        </div>
-        <div class="filter-block">
-          <div class="filter-left">
-            <p class="subject-section">知識主題選擇</p>
-            <div class="subject-btns">
-              <p class="each-btn">項目1</p>
-              <p class="each-btn">項目2</p>
-              <p class="each-btn">項目3</p>
-            </div>
-          </div>
-          <div class="filter-right">
-            <p class="addnewtag">新增標籤</p>
-            <p class="closetag">關閉標籤</p>
-          </div>
-        </div>
+        <GradeTable
+          :grades="props.grades"
+        />
+        <TopicTable
+          :topics="props.topics"
+        />
       </div>
     </div>
     
