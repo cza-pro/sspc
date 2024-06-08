@@ -31,7 +31,6 @@ onMounted(() => {
   // Make a deep copy of props.subjects if tempTopics is empty
   if (tempTopics.value.length === 0) {
     tempTopics.value = JSON.parse(JSON.stringify(props.topics));
-    console.log(tempTopics.value);
   }
 });
 
@@ -39,7 +38,7 @@ const addTopic = () => {
   addForm.post(route('admin.topic.create'), {
     preserveState: true,
     onSuccess: () => {
-      closeNewLbl();
+      closeTopicNewLbl();
       toast.add({
         message: usePage().props.toast.message
       });
@@ -49,12 +48,12 @@ const addTopic = () => {
       toast.add({
         message: usePage().props.toast.message
       });
-      closeNewLbl();
+      closeTopicNewLbl();
     }
   })
 }
 
-function removeItemsFunc() {
+function removeTopicsFunc() {
     formData.checkedTopic = toRemoveItem
     router.post('/admin/topic/close', formData)
     if (checkedTopic instanceof Set) {
@@ -70,21 +69,18 @@ function removeItemsFunc() {
     closeRemove();
 }
 
-const closeNewLbl = () => {
+const closeTopicNewLbl = () => {
   addNewLabel.value = false;
 };
 const closeRemove = () => {
+  toRemoveItem.value = []
   photoRemoveModal.value = false;
 };
 
+function getButtonClass(topic) {
+  return (topic.available === 'off' || toRemoveItem.value.some(item => item == topic.id)) ? 'btn-active' : '';
+}
 const lblToRemoveFunc = (val) => {
-  // Modify the local copy
-  tempTopics.value.forEach(item => {
-    if (val.id === item.id) {
-      item.available = (item.available === 'on') ? 'off' : 'on';
-    }
-  });
-
   if (toRemoveItem.value.indexOf(val.id) === -1) {
     toRemoveItem.value.push(val.id);
   } else {
@@ -109,7 +105,7 @@ const lblToRemoveFunc = (val) => {
   </div>
   <div v-if="addNewLabel" class="modal">
     <div class="modal-newgrade-content">
-      <span class="confirmation-close" @click="closeNewLbl">&times;</span>
+      <span class="confirmation-close" @click="closeTopicNewLbl">&times;</span>
       <p class="grade-text">新增標籤：年級選擇</p>
       <div class="file-div">
         <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="Name of the photo">
@@ -127,12 +123,12 @@ const lblToRemoveFunc = (val) => {
       <div class="itemremove-block">
         <div class="filter1-left">
           <div class="subject1-btns">
-            <p :class="topic.available == 'off' ? 'btn-active' : ''" class="each1-btn" @click="lblToRemoveFunc(topic)" v-for="topic in tempTopics" :key="topic.id">{{topic.name}}</p>
+            <p :class="getButtonClass(topic)" class="each1-btn" @click="lblToRemoveFunc(topic)" v-for="topic in props.topics" :key="topic.id">{{topic.name}}</p>
           </div>
         </div>
       </div>
       <div class="confirm-div">
-        <p class="confirmRemove" @click="removeItemsFunc">確認關閉</p>
+        <p class="confirmRemove" @click="removeTopicsFunc">確認關閉</p>
       </div>
     </div>
   </div>
