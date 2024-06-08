@@ -29,4 +29,12 @@ class Photo extends Model
         return $this->belongsTo(Topic::class);
     }
 
+
+    protected $appends = ['upload_photo_url'];
+
+    public function getUploadPhotoUrlAttribute()
+    {
+        return url($this->photo_url);
+    }
+
 }

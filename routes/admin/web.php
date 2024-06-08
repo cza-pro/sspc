@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\Photo\IndexController as PhotoIndexController;
+use App\Http\Controllers\Admin\Photo\CreateController as PhotoCreateController;
+use App\Http\Controllers\Admin\Photo\DeleteController as PhotoDeleteController;
+use App\Http\Controllers\Admin\Photo\UpdateController as PhotoUpdateController;
 use App\Http\Controllers\Admin\Selector\IndexController as SelectorIndexController;
 use App\Http\Controllers\Admin\Subject\CreateController as SubjectCreateController;
 use App\Http\Controllers\Admin\Grade\CreateController as GradeCreateController;
@@ -23,6 +26,9 @@ Route::get('/', IndexController::class)->name('photo.index');
 Route::middleware(['auth', 'admin'])->group(function(){
 
     Route::get('admin/photo', PhotoIndexController::class)->name('admin.photo.index');
+    Route::post('admin/photo/create', PhotoCreateController::class)->name('admin.photo.create');
+    Route::delete('admin/photo/delete/{photo}', PhotoDeleteController::class)->name('admin.photo.delete');
+    Route::post('admin/photo/update/{photo}', PhotoUpdateController::class)->name('admin.photo.update');
 
     Route::get('admin/selector', SelectorIndexController::class)->name('admin.selector.index');
 
