@@ -28,6 +28,8 @@ const items = computed(() => props.items)
 
 onMounted(() => {
   console.log('Subject is mounted');
+  propsData();
+
   // Make a deep copy of props.subjects if tempSubjects is empty
   if (tempSubjects.value.length === 0) {
     tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
@@ -75,11 +77,19 @@ const closeSubjectNewLbl = () => {
 };
 const closeRemove = () => {
   toRemoveItem.value = []
+  propsData();
   photoRemoveModal.value = false;
 };
+const propsData = () => {
+  props.grades.forEach(item => {
+    if (item.available == 'off') {
+      toRemoveItem.value.push(item.id);
+    }
+  });
+}
 
 function getButtonClass(subject) {
-  return (subject.available === 'off' || toRemoveItem.value.some(item => item == subject.id)) ? 'btn-active' : '';
+  return (toRemoveItem.value.some(item => item == subject.id)) ? 'btn-active' : '';
 }
 const lblToRemoveFunc = (val) => {
   if (toRemoveItem.value.indexOf(val.id) === -1) {
