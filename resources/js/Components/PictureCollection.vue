@@ -53,6 +53,7 @@ const manageFunc = (val) => {
       color: #FA9559;
       padding-bottom: 10px;
       border-bottom: 1px solid #DADADA;
+      text-align: center;
     }
     .btn-block {
       padding-top: 1rem;
