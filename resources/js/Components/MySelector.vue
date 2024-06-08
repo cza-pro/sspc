@@ -18,7 +18,8 @@ const props = defineProps({
 });
 
 const activeNames = ref(['1', '2'])
-const checkList = ref([])
+const subjectsList = ref([])
+const gradesList = ref([])
 const handleChange = (val) => {
   console.log(val)
 }
@@ -40,7 +41,7 @@ const handleChange = (val) => {
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="科目" name="1">
 
-          <el-checkbox-group v-model="checkList" class="check-css">
+          <el-checkbox-group v-model="subjectsList" class="check-css">
             <el-checkbox label="地理" value="Value A" class="custom-checkbox" />
             <el-checkbox label="歷史" value="Value B" class="custom-checkbox" />
             <el-checkbox label="公民" value="Value C" class="custom-checkbox" />
@@ -48,7 +49,7 @@ const handleChange = (val) => {
 
         </el-collapse-item>
         <el-collapse-item title="年級" name="2">
-          <el-checkbox-group v-model="checkList" class="check-css">
+          <el-checkbox-group v-model="gradesList" class="check-css">
             <el-checkbox label="一年級" value="Value A" class="custom-checkbox" />
             <el-checkbox label="二年級" value="Value B" class="custom-checkbox" />
             <el-checkbox label="三年級" value="Value C" class="custom-checkbox" />
