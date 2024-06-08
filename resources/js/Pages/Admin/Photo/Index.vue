@@ -112,7 +112,7 @@ const newGrade = ref('四年級')
 const grade = ref('')
 const knowledgeTopic = ref('')
 const photoType = ref('')
-const currentActive = ref('')
+const currentActive = ref('pictureManage')
 
 const suboptions = [
   {
@@ -182,7 +182,7 @@ const removeItemsFunc = () => {
 <template>
   <div class="photo-content">
     <div class="left-content">
-      <PictureCollection @menu-manage="menuManage" />
+      <PictureCollection @menu-manage="menuManage" currentActive="pictureManage" />
       <MySelector :results="results" :searchName="searchName" />
     </div>
     <div class="right-content">
