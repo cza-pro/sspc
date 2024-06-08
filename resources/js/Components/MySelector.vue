@@ -108,6 +108,18 @@ const handleChange = (val) => {
   .el-collapse-item__wrap {
       border-bottom: 0 solid var(--el-collapse-border-color);
   }
+  .el-checkbox__inner:after {
+    left: 43%;
+    top: 28%;
+  }
+  
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #00A15D;
+    border-color: #00A15D;
+  }
+  .el-checkbox {
+    --el-checkbox-checked-text-color: #00A15D;
+  }
 </style>
 <style scoped>
 .demo-collapse {
