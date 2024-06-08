@@ -1,9 +1,11 @@
 <script setup>
 
-import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import { Head, Link, router, useForm , usePage} from "@inertiajs/vue3";
 import { reactive, ref, watch } from "vue";
 import PictureCollection from "../../../Components/PictureCollection.vue";
 import MySelector from "../../../Components/MySelector.vue";
+import moment from 'moment';
+import toast from '@/Stores/toast';
 
 const props = defineProps({
   canLogin: {
@@ -19,6 +21,18 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  subjectss: {
+    type: Object,
+    default: {},
+  },
+  gradess: {
+    type: Object,
+    default: {},
+  },
+  topicss: {
+    type: Object,
+    default: {},
+  },
   filters: {
     type: Object,
     default: {},
@@ -28,7 +42,7 @@ const props = defineProps({
 const fname = ref("");
 const photoName = ref("");
 const photoEditModal = ref(false);
-const photoDeleteModal = ref(false);
+const photoDeleteModal = ref('');
 const photoUploadModal = ref(false);
 const addNewLabel = ref(false);
 const photoRemoveModal = ref(false);
@@ -39,23 +53,14 @@ const closeEdit = () => {
 const closeDelete = () => {
   photoDeleteModal.value = false;
 };
-const closeRemove = () => {
-  photoRemoveModal.value = false;
-};
+
 const closeUpload = () => {
   photoUploadModal.value = false;
 };
 const closeNewLbl = () => {
   addNewLabel.value = false;
 };
-const closeFeatureUpload = () => {
-  featureUploadModal.value = false;
-};
 
-const deleteFunc = () => {
-  console.log('Deleted')
-  closeDelete();
-};
 const cancelFunc = () => {
   console.log('Cancel')
   closeDelete();
@@ -114,48 +119,7 @@ const knowledgeTopic = ref('')
 const photoType = ref('')
 const currentActive = ref('pictureManage')
 
-const suboptions = [
-  {
-    value: 'Subject1',
-    label: 'Subject1',
-  },
-  {
-    value: 'Subject2',
-    label: 'Subject2',
-  },
-  {
-    value: 'Subject3',
-    label: 'Subject3',
-  }
-]
-const gradeoptions = [
-  {
-    value: 'Grade1',
-    label: 'Grade1',
-  },
-  {
-    value: 'Grade2',
-    label: 'Grade2',
-  },
-  {
-    value: 'Grade3',
-    label: 'Grade3',
-  }
-]
-const topicoptions = [
-  {
-    value: 'topic1',
-    label: 'topic1',
-  },
-  {
-    value: 'topic2',
-    label: 'topic2',
-  },
-  {
-    value: 'topic3',
-    label: 'topic3',
-  }
-]
+
 const typeoptions = [
   {
     value: 'type1',
@@ -173,8 +137,127 @@ const typeoptions = [
 const menuManage = (val) => {
   currentActive.value = val
 }
+
 const removeItemsFunc = () => {
   photoRemoveModal.value = false
+}
+
+const photoAddForm = useForm({
+    id: '',
+    photo_url: '',
+    name: '',
+    subject_id: '',
+    grade_id: '',
+    topic_id: '',
+    photo_type: ''
+});
+
+
+
+const createPhoto = () => {
+  photoAddForm.post(route('admin.photo.create'), {
+    preserveState: true,
+    onSuccess: () => {
+       closeUpload();
+       toast.add({
+          message: usePage().props.toast.message
+       });
+    },
+    onError: () => {
+       photoAddForm.reset(),
+       toast.add({
+          message: usePage().props.toast.message
+       });
+       closeUpload()
+    }
+  })
+}
+
+const deleteId = ref('');
+
+const photoDeleteId = (photo) => {
+    photoDeleteModal.value = true
+    deleteId.value = photo
+}
+
+ const deletePhoto = () => {
+  router.delete(
+    route("admin.photo.delete", {
+      photo: deleteId.value,
+    }),
+    {
+      onSuccess: () => {
+          toast.add({
+            message: "Delete Photo!",
+        })
+        photoDeleteModal.value = false;
+      },
+      onError: () => {
+        toast.add({
+          message: "Delete failed !",
+        });
+        photoDeleteModal.value = false;
+      },
+    }
+  );
+};
+
+const tdatest = ref('')
+
+
+const photoEdit = (photo) => {
+  photoAddForm.id = photo.id;
+  photoAddForm.name = photo.name;
+  photoAddForm.subject_id = photo.subject_id;
+  photoAddForm.grade_id = photo.grade_id;
+  photoAddForm.topic_id = photo.topic_id;
+  photoAddForm.upload_photo_url = photo.upload_photo_url;
+  photoAddForm.photo_format = photo.photo_format;
+  photoAddForm.photo_size = photo.photo_size;
+  photoAddForm.generate_number = photo.generate_number;
+
+
+
+    props.subjectss.forEach(item => {
+        if(item.id == photo.subject_id) {
+            tdatest.value = item.id
+            console.log('heyyyyyyy ', tdatest.value)
+        }
+    })
+
+
+  photoEditModal.value = true;
+
+};
+
+
+
+const updatePhoto = () => {
+    console.log(photoAddForm.id);
+  photoAddForm.post(route('admin.photo.update', {
+    photo: photoAddForm.id
+  }), {
+    preserveScroll: true,
+    onSuccess: () => {
+      toast.add({
+        message: 'Photo updated !'
+      })
+      photoAddForm.reset();
+      photoEditModal.value = false;
+    },
+    onError: () => {
+      toast.add({
+        message: 'Photo update failed !'
+      })
+      photoAddForm.reset();
+    //   photoEditModal.value = false;
+    },
+    onFinish: () => {
+      photoAddForm.reset();
+      router.reload('admin.photo.index');
+    }
+  })
+
 }
 
 </script>
@@ -194,166 +277,97 @@ const removeItemsFunc = () => {
           </div>
         </div>
         <div>
-          <div v-for="i in 2" :key="i" class="each-block">
+            <!-- {{photos}} -->
+          <div v-for="photo in photos" :key="photo.id" class="each-block">
             <div class="first-row">
-              <p class="datetime-css">建立日期(2004/05/06/13:05)</p>
+              <p class="datetime-css">建立日期 ({{moment(String(photo.created_at)).format('YYYY/MM/DD/hh:mm')}})</p>
               <div class="available-css">
-                <div class="green-circle"></div>
+                <div :class="photo.public === 'on' ? 'green-circle' : ''"></div>
                 <p class="available-txt">上架中</p>
               </div>
             </div>
             <div class="photo-row">
               <div class="photo-left">
-                <img src="/images/photo1.png" alt="upload" class="imagecss">
+                <img :src="photo.upload_photo_url" alt="upload" class="imagecss">
                 <div class="photoright-content">
                   <p class="photo-info">
-                    圖片名稱：{{}}Name of the photo
+                    圖片名稱: {{photo.name}}
                   </p>
                   <p class="photo-info">
-                    科目：{{}}Subject of this photo belong
+                    科目: {{photo.subject.name}}
                   </p>
                   <p class="photo-info">
-                    年級：{{}}Grade of this photo related to
+                    年級：{{photo.grade.name}}
                   </p>
                   <p class="photo-info">
-                    圖片類型：{{}}type of this photo
+                    圖片類型： {{photo.photo_type}}
                   </p>
                   <p class="photo-info">
-                    圖片格式：{{}}JPG
+                    圖片格式：{{photo.photo_format}}
                   </p>
                   <p class="photo-info">
-                    圖片尺寸：{{}}300x140
+                    圖片尺寸 {{photo.photo_size}}
                   </p>
                   <p class="photo-info">
-                    圖片流水號：{{}}32130026412320
+                    圖片流水號：{{photo.generate_number}}
                   </p>
                 </div>
               </div>
               <div class="row-data">
                 <div class="btn-row">
-                  <p class="btn-one" @click="photoEditModal = true">編輯</p>
+                  <!-- <p class="btn-one" @click="photoEditModal = true">編輯</p> -->
+                  <p class="btn-one" @click="photoEdit(photo)">編輯</p>
                   <p class="btn-two">下架</p>
-                  <p class="btn-three" @click="photoDeleteModal = true">刪除</p>
+                  <p class="btn-three" @click="photoDeleteId(photo.id)">刪除</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div v-else-if="currentActive == 'featureImage'">
-        <div class="btn-div">
-          <div class="btn-css" @click="featureUploadModal = true">
-            <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
-            <p class="upload-txt">上傳圖片</p>
-          </div>
-        </div>
-        <div>
-          <div v-for="i in 1" :key="i" class="each-block">
-            <div class="first-row">
-              <p class="datetime-css">建立日期(2004/05/06/13:05)</p>
-              <div class="available-css">
-                <div class="green-circle"></div>
-                <p class="available-txt">上架中</p>
-              </div>
-            </div>
-            <div class="photo-row">
-              <div class="photo-left">
-                <img src="/images/photo1.png" alt="upload" class="imagecss">
-                <div class="photoright-content">
-                  <p class="photo-info">
-                    圖片名稱：{{}}Name of the photo
-                  </p>
-                  <p class="photo-info">
-                    圖片格式：PNG
-                  </p>
-                  <p class="photo-info">
-                    圖片尺寸：300x140
-                  </p>
-                </div>
-              </div>
-              <div class="row-data">
-                <div class="btn-row">
-                  <p class="btn-two">下架</p>
-                  <p class="btn-three" @click="photoDeleteModal = true">刪除</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="currentActive == 'editFilter'">
-        <div class="filter-block">
-          <div class="filter-left">
-            <p class="subject-section">科目選擇</p>
-            <div class="subject-btns">
-              <p class="each-btn">歷史</p>
-              <p class="each-btn">地理</p>
-              <p class="each-btn">公民</p>
-              <p class="each-btn">國語</p>
-              <p class="each-btn">數學</p>
-              <p class="each-btn">英文</p>
-              <p class="each-btn">物理</p>
-              <p class="each-btn">生物</p>
-              <p class="each-btn removeitem">地球科學</p>
-            </div>
-          </div>
-          <div class="filter-right">
-            <p class="addnewtag" @click="addNewLabel = true">新增標籤</p>
-            <p class="closetag" @click="photoRemoveModal = true">關閉標籤</p>
-          </div>
-        </div>
-        <div class="filter-block">
-          <div class="filter-left">
-            <p class="subject-section">年級選擇</p>
-            <div class="subject-btns">
-              <p class="each-btn">一年級</p>
-              <p class="each-btn">二年級</p>
-              <p class="each-btn">三年級</p>
-            </div>
-          </div>
-          <div class="filter-right">
-            <p class="addnewtag">新增標籤</p>
-            <p class="closetag">關閉標籤</p>
-          </div>
-        </div>
-        <div class="filter-block">
-          <div class="filter-left">
-            <p class="subject-section">知識主題選擇</p>
-            <div class="subject-btns">
-              <p class="each-btn">項目1</p>
-              <p class="each-btn">項目2</p>
-              <p class="each-btn">項目3</p>
-            </div>
-          </div>
-          <div class="filter-right">
-            <p class="addnewtag">新增標籤</p>
-            <p class="closetag">關閉標籤</p>
-          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- photo Edit Modal -->
     <div v-if="photoEditModal" class="editModal">
       <div class="modal-confirm-content">
         <span class="confirmation-close" @click="closeEdit">&times;</span>
-        <img src="/images/photo1.png" alt="upload" class="modal-photo">
+        <!-- <img src="/images/photo1.png" alt="upload" class="modal-photo"> -->
+        <img :src="photoAddForm.upload_photo_url" alt="upload" class="modal-photo">
         <p class="fname">圖片名稱</p>
-        <input type="text" v-model="fname" id="fname" name="fname" class="inputname" placeholder="Name of the photo">
+        <input type="text" v-model="photoAddForm.name" id="photoAddForm.name" name="photoAddForm.name" class="inputname" placeholder="Name of the photo">
         <div class="selection-block">
-          <el-select
-            v-model="subjects"
-            placeholder="科目"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper1"
-          >
-            <el-option
-              v-for="item in suboptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-          <el-select
+            <!-- <el-select
+                v-model="tdatest"
+                placeholder="科目"
+                size="large"
+                style="width: 240px"
+                class="elselectwrapper1"
+            >
+                <el-option
+                v-for="subject in subjectss"
+                :key="subject.id"
+                :label="subject.name"
+                :value="subject.id"
+                :selected="photoAddForm.subject_id == subject.id"
+                />
+            </el-select> -->
+
+        <select  v-model="photoAddForm.subject_id" class="elselectwrapper1">
+            <option
+                v-for="subject in subjectss"
+                :value="subject.id"
+                :key="subject.id"
+                class="py-4 my-3 capitalize"
+                :selected="
+                    photoAddForm.subject_id == subject.id
+                "
+            >
+            {{ subject.name }}
+            </option>
+        </select>
+
+          <!-- <el-select
             v-model="grade"
             placeholder="年級"
             size="large"
@@ -366,10 +380,24 @@ const removeItemsFunc = () => {
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
+          </el-select> -->
+
+        <select v-model="photoAddForm.grade_id" class="elselectwrapper2">
+            <option
+                v-for="grade in gradess"
+                :value="grade.id"
+                :key="grade.id"
+                class="capitalize"
+                :selected="
+                    photoAddForm.grade_id == grade.id
+                "
+            >
+            {{ grade.name }}
+            </option>
+        </select>
         </div>
         <div class="selection-block">
-          <el-select
+          <!-- <el-select
             v-model="knowledgeTopic"
             placeholder="知識主題"
             size="large"
@@ -382,7 +410,22 @@ const removeItemsFunc = () => {
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
+          </el-select> -->
+
+        <select v-model="photoAddForm.topic_id" class="elselectwrapper1" >
+            <option
+                v-for="topic in topicss"
+                :value="topic.id"
+                :key="topic.id"
+                class="capitalize"
+                :selected="
+                    photoAddForm.topic_id == topic.id
+                "
+            >
+            {{ topic.name }}
+            </option>
+        </select>
+
           <el-select
             v-model="photoType"
             placeholder="圖片類型"
@@ -398,77 +441,90 @@ const removeItemsFunc = () => {
             />
           </el-select>
         </div>
+
+        <button :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing"
+                @click="updatePhoto">
+            Update
+      </button>
+
         <div class="photoinfo">
-          <p>圖片格式：JPG</p>
-          <p>圖片尺寸：300x140</p>
-          <p>圖片流水號：32130026412320</p>
+          <p>圖片格式：{{photoAddForm.photo_format}}</p>
+          <p>圖片尺寸：{{photoAddForm.photo_size}}</p>
+          <p>圖片流水號：{{photoAddForm.generate_number}}</p>
         </div>
       </div>
     </div>
+    <!-- end photo Edit Modal -->
+
+    <!-- photo delete modal -->
     <div v-if="photoDeleteModal" class="editModal">
       <div class="modal-confirm-content">
         <span class="confirmation-close" @click="closeDelete">&times;</span>
         <p class="confirm-text">確定刪除”圖片名稱”？</p>
-        <button @click="deleteFunc" class="delete-button">刪除</button>
+        <button @click="deletePhoto" class="delete-button">刪除</button>
         <button @click="cancelFunc" class="cancel-button">取消</button>
       </div>
     </div>
+    <!-- end photo delete modal -->
+
+    <!-- photo upload modal -->
     <div v-if="photoUploadModal" class="editModal">
       <div class="modal-confirm-content">
         <span class="confirmation-close" @click="closeUpload">&times;</span>
         <p class="fname">檔案名稱：</p>
         <div class="file-div">
-          <p class="selectFile">選擇檔案</p>
+          <p class="selectFile"><input type="file" @input="photoAddForm.photo_url = $event.target.files[0]" />選擇檔案</p>
         </div>
         <p class="fname">圖片名稱</p>
-        <input type="text" v-model="photoName" id="photoName" name="photoName" class="photoName" placeholder="請輸入圖片名稱">
+        <input type="text" v-model="photoAddForm.name" id="photoAddForm.name" name="photoAddForm.name" class="photoName" placeholder="請輸入圖片名稱">
         <div class="selection-block">
+
           <el-select
-            v-model="subjects"
+            v-model="photoAddForm.subject_id"
             placeholder="科目"
             size="large"
             style="width: 240px"
             class="elselectwrapper1"
           >
             <el-option
-              v-for="item in suboptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="subject in subjectss"
+              :key="subject.value"
+              :label="subject.name"
+              :value="subject.id"
             />
           </el-select>
           <el-select
-            v-model="grade"
+            v-model="photoAddForm.grade_id"
             placeholder="年級"
             size="large"
             style="width: 240px"
             class="elselectwrapper2"
           >
             <el-option
-              v-for="item in gradeoptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="grade in gradess"
+              :key="grade.value"
+              :label="grade.name"
+              :value="grade.id"
             />
           </el-select>
         </div>
         <div class="selection-block">
           <el-select
-            v-model="knowledgeTopic"
+            v-model="photoAddForm.topic_id"
             placeholder="知識主題"
             size="large"
             style="width: 240px"
             class="elselectwrapper1"
           >
             <el-option
-              v-for="item in topicoptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="topic in topicss"
+              :key="topic.value"
+              :label="topic.name"
+              :value="topic.id"
             />
           </el-select>
           <el-select
-            v-model="photoType"
+            v-model="photoAddForm.photo_type"
             placeholder="圖片類型"
             size="large"
             style="width: 240px"
@@ -482,6 +538,9 @@ const removeItemsFunc = () => {
             />
           </el-select>
         </div>
+        <button @click="createPhoto" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
+            Confirm
+        </button>
         <div class="photoinfo">
           <p>圖片格式：JPG</p>
           <p>圖片尺寸：300x140</p>
@@ -489,55 +548,9 @@ const removeItemsFunc = () => {
         </div>
       </div>
     </div>
-    <div v-if="featureUploadModal" class="featureModal">
-      <div class="modal-confirm-content">
-        <span class="confirmation-close" @click="closeFeatureUpload">&times;</span>
-        <div class="file-div">
-          <p class="selectFile">選擇檔案</p>
-        </div>
-        <p class="f1name">檔案名稱：</p>
-        <div class="file-div">
-          <p class="select1File">確認上傳</p>
-        </div>
-      </div>
-    </div>
-    <div v-if="photoRemoveModal" class="removeModal">
-      <div class="modal-closelbl-content">
-        <span class="confirmation-close" @click="closeRemove">&times;</span>
-        <p class="closelbl-text">請選擇欲關閉之標籤</p>
-        <p class="sub-selection">科目選擇</p>
-        <div class="itemremove-block">
-          <div class="filter1-left">
-            <div class="subject1-btns">
-              <p class="each1-btn">歷史</p>
-              <p class="each1-btn">地理</p>
-              <p class="each1-btn btn-active">公民</p>
-              <p class="each1-btn">國語</p>
-              <p class="each1-btn">數學</p>
-              <p class="each1-btn">英文</p>
-              <p class="each1-btn">物理</p>
-              <p class="each1-btn">生物</p>
-              <p class="each1-btn">地球科學</p>
-            </div>
-          </div>
-        </div>
-        <div class="confirm-div">
-          <p class="confirmRemove" @click="removeItemsFunc">確認關閉</p>
-        </div>
-      </div>
-    </div>
-    <div v-if="addNewLabel" class="modal">
-      <div class="modal-newgrade-content">
-        <span class="confirmation-close" @click="closeNewLbl">&times;</span>
-        <p class="grade-text">新增標籤：年級選擇</p>
-        <div class="file-div">
-          <input type="text" v-model="newGrade" id="newGrade" name="newGrade" class="gradecss" placeholder="Name of the photo">
-        </div>
-        <div class="btn-btn">
-          <p class="grade-btn">確認新增</p>
-        </div>
-      </div>
-    </div>
+
+    <!-- end photo upload modal -->
+
   </div>
 </template>
 <style>
@@ -671,8 +684,8 @@ const removeItemsFunc = () => {
             background: #2BCF32;
           }
         }
-        
-        
+
+
       }
       .filter-block {
         background: #FFD6A7;
@@ -763,7 +776,7 @@ const removeItemsFunc = () => {
     height: 100%;
     overflow: auto;
     // background-color: rgba(0, 0, 0, 0.8);
-    // backdrop-filter: blur(4px); 
+    // backdrop-filter: blur(4px);
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(2px); /* Apply blur effect */
   }
@@ -869,7 +882,7 @@ const removeItemsFunc = () => {
     font-weight: 400;
     font-size: 24px;
     color: #392F26;
-  } 
+  }
   .sub-selection {
     font-weight: 700;
     font-size: 1rem;
