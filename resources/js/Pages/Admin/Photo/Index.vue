@@ -53,6 +53,9 @@ const closeEdit = () => {
 const closeDelete = () => {
   photoDeleteModal.value = false;
 };
+const closeRemove = () => {
+  photoRemoveModal.value = false;
+};
 
 const closeUpload = () => {
   photoUploadModal.value = false;
@@ -64,6 +67,11 @@ const closeNewLbl = () => {
 const cancelFunc = () => {
   console.log('Cancel')
   closeDelete();
+};
+
+const removePhotoCancelFunc = () => {
+  console.log('Cancel')
+  closeRemove();
 };
 
 const statusRef = ref("");
@@ -177,7 +185,8 @@ const deleteId = ref('');
 
 const photoDeleteId = (photo) => {
     photoDeleteModal.value = true
-    deleteId.value = photo
+    deleteId.value = photo.id
+    photoAddForm.name = photo.name;
 }
 
  const deletePhoto = () => {
@@ -260,6 +269,35 @@ const updatePhoto = () => {
 
 }
 
+const photoRemove = (photo) => {
+  photoAddForm.id = photo.id;
+  photoAddForm.name = photo.name;
+  photoRemoveModal.value = true;
+
+};
+
+ const removePhotoFunc = () => {
+    console.log(photoAddForm.id);
+   photoAddForm.post(route('admin.photo.remove', {
+    photo: photoAddForm.id
+  }),
+    {
+      onSuccess: () => {
+          toast.add({
+            message: "Remove Photo!",
+        })
+        photoRemoveModal.value = false;
+      },
+      onError: () => {
+        toast.add({
+          message: "Remove failed !",
+        });
+        photoRemoveModal.value = false;
+      },
+    }
+  );
+};
+
 </script>
 
 <template>
@@ -282,7 +320,7 @@ const updatePhoto = () => {
             <div class="first-row">
               <p class="datetime-css">建立日期 ({{moment(String(photo.created_at)).format('YYYY/MM/DD/hh:mm')}})</p>
               <div class="available-css">
-                <div :class="photo.public === 'on' ? 'green-circle' : ''"></div>
+                <div :class="photo.public === 'on' ? 'green-circle' : 'grey-circle'"></div>
                 <p class="available-txt">上架中</p>
               </div>
             </div>
@@ -317,8 +355,8 @@ const updatePhoto = () => {
                 <div class="btn-row">
                   <!-- <p class="btn-one" @click="photoEditModal = true">編輯</p> -->
                   <p class="btn-one" @click="photoEdit(photo)">編輯</p>
-                  <p class="btn-two">下架</p>
-                  <p class="btn-three" @click="photoDeleteId(photo.id)">刪除</p>
+                  <p class="btn-two" @click="photoRemove(photo)">下架</p>
+                  <p class="btn-three" @click="photoDeleteId(photo)">刪除</p>
                 </div>
               </div>
             </div>
@@ -460,7 +498,7 @@ const updatePhoto = () => {
     <div v-if="photoDeleteModal" class="editModal">
       <div class="modal-confirm-content">
         <span class="confirmation-close" @click="closeDelete">&times;</span>
-        <p class="confirm-text">確定刪除”圖片名稱”？</p>
+        <p class="confirm-text">確定刪除”{{photoAddForm.name}}”？</p>
         <button @click="deletePhoto" class="delete-button">刪除</button>
         <button @click="cancelFunc" class="cancel-button">取消</button>
       </div>
@@ -551,6 +589,18 @@ const updatePhoto = () => {
 
     <!-- end photo upload modal -->
 
+
+    <!-- photo remove modal -->
+    <div v-if="photoRemoveModal" class="editModal">
+      <div class="modal-confirm-content">
+        <span class="confirmation-close" @click="removePhotoCancelFunc">&times;</span>
+        <p class="confirm-text">你確定要刪除嗎 "{{photoAddForm.name}}"？</p>
+        <button @click="removePhotoFunc" class="delete-button">刪除</button>
+        <button @click="removePhotoCancelFunc" class="cancel-button">取消</button>
+      </div>
+    </div>
+    <!-- end photo remove modal -->
+
   </div>
 </template>
 <style>
@@ -634,6 +684,12 @@ const updatePhoto = () => {
               height: 12px;
               border-radius: 6px;
               background: #2CEE28;
+            }
+            .grey-circle {
+              width: 12px;
+              height: 12px;
+              border-radius: 6px;
+              background: #524f4f;
             }
             .available-txt {
               font-weight: 400;
