@@ -32,6 +32,7 @@ const props = defineProps({
 
 const photoDeleteModal = ref(false);
 const photoRemoveModal = ref(false);
+const fea_img = ref();
 
 const closeDelete = () => {
   photoDeleteModal.value = false;
@@ -43,17 +44,24 @@ const closeRemove = () => {
 };
 
 const cancelDelFunc = () => {
-  console.log('Cancel')
   closeDelete();
 };
 
 const cancelRevFunc = () => {
-  console.log('Cancel')
   closeRemove();
 };
 
+const photoRemoveId = (feature_img) => {
+    fea_img.value = feature_img;
+    photoRemoveModal.value = true;
+}
+
+const photoDeleteId = (feature_image) => {
+    fea_img.value = feature_image;
+    photoDeleteModal.value = true;
+}
+
 const removeFeatureImageFunc = (feature_image) => {
-    console.log(feature_image);
   router.post(
     route("admin.feature_image.remove", {
       feature_image: feature_image,
@@ -62,7 +70,7 @@ const removeFeatureImageFunc = (feature_image) => {
       onSuccess: () => {
           toast.add({
             message: "Remove Feature Image!",
-        })
+        });
         closeRemove();
       },
       onError: () => {
@@ -73,6 +81,7 @@ const removeFeatureImageFunc = (feature_image) => {
       },
     }
   );
+    closeRemove();
 };
 
 const deleteFeatureImageFunc = (feature_image) => {
@@ -101,56 +110,12 @@ const deleteFeatureImageFunc = (feature_image) => {
 
 <template>
 
-
-  <!-- <CardBox has-table>
-    <p>feature_image</p>
-    <table class="text-xs bg-white rounded">
-        <thead>
-            <tr>
-                <th class="text-left">စဥ်</th>
-                <th class="text-left">အမည်</th>
-                <th class="text-left">No</th>
-                <th class="text-left">Name</th>
-                <th class="text-left">Photo Type</th>
-                <th class="text-left">Photo Size</th>
-            </tr>
-        </thead>
-        <tbody>
-
-
-            <tr v-for="(feature_image, index) in props.feature_images" :key="feature_image.id">
-                <td class="text-left">{{ index + 1}}</td>
-                <td class="text-left">{{ feature_image.name }}</td>
-                <td class="text-left">{{ feature_image.photo_type }}</td>
-                <td class="text-left">{{ feature_image.photo_size }}</td>
-                <img
-                    :src="feature_image.feature_photo_url"
-                    class="w-10 h-10 mx-auto"
-                    alt="feature image"
-                />
-
-                <td>
-                   <PrimaryButton class="ml-3" @click="removeFeatureImage(feature_image.id)">
-                        Remove
-                    </PrimaryButton>
-
-                   <PrimaryButton class="ml-3" @click="deleteFeatureImage(feature_image.id)">
-                        Delete
-                    </PrimaryButton>
-                </td>
-
-              </tr>
-
-            </tbody>
-    </table>
-  </CardBox> -->
-
 <div>
     <div v-for="feature_img in feature_images" :key="feature_img" class="each-block">
         <div class="first-row">
             <p class="datetime-css">建立日期({{moment(String(feature_img.created_at)).format('YYYY/MM/DD/hh:mm')}})</p>
             <div class="available-css">
-            <div class="green-circle"></div>
+            <div :class="feature_img.public === 'on' ? 'green-circle' : 'grey-circle'"></div>
             <p class="available-txt">上架中</p>
             </div>
         </div>
@@ -171,37 +136,45 @@ const deleteFeatureImageFunc = (feature_image) => {
             </div>
             <div class="row-data">
             <div class="btn-row">
-                <p class="btn-two" @click="photoRemoveModal = true">下架</p>
-                <p class="btn-three" @click="photoDeleteModal = true">刪除</p>
+                <!-- <p class="btn-two" @click="photoRemoveModal = true">下架</p>
+                <p class="btn-three" @click="photoDeleteModal = true">刪除</p> -->
+
+                <p class="btn-two" @click="photoRemoveId(feature_img)">下架</p>
+                <p class="btn-three" @click="photoDeleteId(feature_img)">刪除</p>
             </div>
             </div>
         </div>
 
+    </div>
 
-        <div v-if="photoDeleteModal" class="editModal">
-            <div class="modal-confirm-content">
-                <span class="confirmation-close" @click="closeDelete">&times;</span>
-                <p class="confirm-text">確定刪除”{{feature_img.name}}”？</p>
-                <button @click="deleteFeatureImageFunc" class="delete-button">刪除a</button>
-                <button @click="cancelDelFunc" class="cancel-button">取消</button>
-            </div>
+    <div v-if="photoRemoveModal" class="editModal">
+        <div class="modal-confirm-content">
+            <span class="confirmation-close" @click="closeRemove">&times;</span>
+            <p class="confirm-text">確定刪除 "{{fea_img.name}}"？</p>
+            <button @click="removeFeatureImageFunc(fea_img.id)" class="delete-button">下架</button>
+            <button @click="cancelRevFunc" class="cancel-button">取消</button>
         </div>
+    </div>
 
-        <div v-if="photoRemoveModal" class="editModal">
-            <div class="modal-confirm-content">
-                <span class="confirmation-close" @click="closeRemove">&times;</span>
-                <p class="confirm-text">確定刪除”{{feature_img.name}}”？</p>
-                <button @click="removeFeatureImageFunc" class="delete-button">下架b</button>
-                <button @click="cancelRevFunc" class="cancel-button">取消</button>
-            </div>
+    <div v-if="photoDeleteModal" class="editModal">
+        <div class="modal-confirm-content">
+            <span class="confirmation-close" @click="closeDelete">&times;</span>
+            <p class="confirm-text">確定刪除 "{{fea_img.name}}"？</p>
+            <button @click="deleteFeatureImageFunc(fea_img.id)" class="delete-button">刪除</button>
+            <button @click="cancelDelFunc" class="cancel-button">取消</button>
         </div>
-
     </div>
 </div>
 
 </template>
 
 <style lang="scss" scoped>
+    .grey-circle {
+        width: 12px;
+        height: 12px;
+        border-radius: 6px;
+        background: #524f4f;
+    }
   .photo-content {
     display: flex;
     max-width: 1200px;
