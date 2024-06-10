@@ -1,0 +1,1 @@
+import{h as o,o as t,i as a}from"./app-D9WQMsEa.js";/* empty css            */const _={__name:"NavBar",props:{},setup(r){return(n,p)=>{const e=o("Head");return t(),a(e,{title:"Side Bar"})}}};export{_ as default};
