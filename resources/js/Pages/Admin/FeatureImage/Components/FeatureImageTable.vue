@@ -201,36 +201,6 @@ const deleteFeatureImageFunc = (feature_image) => {
 
 </template>
 
-<style>
-  .elselectwrapper1 .el-select__wrapper {
-    border: 0 solid red !important;
-  }
-  .elselectwrapper2 .el-select__wrapper {
-    border: 0 solid red !important;
-  }
-
-  .el-select__suffix {
-    background-image: url('/images/admin/admin-dd.png');
-    background-size: 100% 100%;
-    width: 20px; /* Adjust icon size as needed */
-    height: 10px;
-  }
-  .el-select__caret {
-    display: none;
-  }
-  .el-select__placeholder {
-    font-weight: 400;
-    font-size: 20px;
-    color: #000 !important;
-  }
-  .el-select {
-    width: 50% !important;
-    margin: 0;
-  }
-  .text-disable {
-    color: red
-  }
-</style>
 <style lang="scss" scoped>
   .photo-content {
     display: flex;
