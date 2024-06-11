@@ -1,97 +1,96 @@
 <script setup>
-import { computed, ref ,reactive,onMounted} from 'vue';
+import { computed, ref, reactive, onMounted } from 'vue';
 import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const props = defineProps({
-  subjects: {
+  photo_types: {
     type: Object,
     default: {}
   }
 })
 const addForm = useForm({
-  name: '四年級'
+  name: ''
 });
-const checkedSubject = ref([])
-const addNewLabel = ref(false);
+
+const checkedPhotoType = ref([])
+const addNewPhotoTypeModal = ref(false);
 const toRemoveItem = ref([]);
-const photoRemoveModal = ref(false);
-const tempSubjects = ref([]); // Create a local copy of props.subjects
+const photoTypeRemoveModal = ref(false);
+const tempPhotoType = ref([]); // Create a local copy of props.topics
 
 const formData = reactive({
-  checkedSubject: checkedSubject
+  checkedPhotoType: checkedPhotoType
 })
-
 const items = computed(() => props.items)
 
 onMounted(() => {
-  console.log('Subject is mounted');
+  console.log('Topic is mounted');
   propsData();
 
-  // Make a deep copy of props.subjects if tempSubjects is empty
-  if (tempSubjects.value.length === 0) {
-    tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
+  // Make a deep copy of props.subjects if tempPhotoType is empty
+  if (tempPhotoType.value.length === 0) {
+    tempPhotoType.value = JSON.parse(JSON.stringify(props.photo_types));
   }
 });
 
-const addSubject = () => {
-  addForm.post(route('admin.subject.create'), {
+const addPhotoType = () => {
+  addForm.post(route('admin.photo_type.create'), {
     preserveState: true,
     onSuccess: () => {
-       closeSubjectNewLbl();
-       toast.add({
-          message: usePage().props.toast.message
-       });
+      closePhotoTypeNewLbl();
+      toast.add({
+        message: usePage().props.toast.message
+      });
     },
     onError: () => {
-       addForm.reset(),
-       toast.add({
-          message: usePage().props.toast.message
-       });
-       closeSubjectNewLbl()
+      addForm.reset(),
+      toast.add({
+        message: usePage().props.toast.message
+      });
+      closePhotoTypeNewLbl();
     }
   })
 }
 
-function removeSubjectsFunc() {
-  // formData.checkedSubject = checkedSubject
-  formData.checkedSubject = toRemoveItem
-  router.post('/admin/subject/close', formData)
-  if (checkedSubject instanceof Set) {
-      checkedSubject.clear();
-  } else {
-      checkedSubject.value = [];
-  }
-  toast.add({
-      message: "Add !",
-      duration: 3000
-  });
-  tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
-  closeRemove();
+function removeTopicsFunc() {
+    formData.checkedPhotoType = toRemoveItem
+    router.post('/admin/photo-type/close', formData)
+    if (checkedPhotoType instanceof Set) {
+        checkedPhotoType.clear();
+    } else {
+        checkedPhotoType.value = [];
+    }
+    toast.add({
+        message: "Add !",
+        duration: 3000
+    });
+    tempPhotoType.value = JSON.parse(JSON.stringify(props.photo_types));
+    closeRemove();
 }
 
-const closeSubjectNewLbl = () => {
-  addNewLabel.value = false;
+const closePhotoTypeNewLbl = () => {
+  addNewPhotoTypeModal.value = false;
 };
 const closeRemove = () => {
   toRemoveItem.value = []
   propsData();
-  photoRemoveModal.value = false;
+  photoTypeRemoveModal.value = false;
 };
 const propsData = () => {
-  props.subjects.forEach(item => {
+  props.photo_types.forEach(item => {
     if (item.available == 'off') {
       toRemoveItem.value.push(item.id);
     }
   });
 }
 
-function getButtonClass(subject) {
-  return (toRemoveItem.value.some(item => item == subject.id)) ? 'btn-active' : '';
+function getButtonClass(photo_type) {
+  return (toRemoveItem.value.some(item => item == photo_type.id)) ? 'btn-active' : '';
 }
-const lblToRemoveFunc = (val) => {
+const photoTypeToRemoveFunc = (val) => {
   if (toRemoveItem.value.indexOf(val.id) === -1) {
     toRemoveItem.value.push(val.id);
   } else {
@@ -104,49 +103,47 @@ const lblToRemoveFunc = (val) => {
 
   <div class="filter-block">
     <div class="filter-left">
-      <p class="subject-section">科目選擇</p>
+      <p class="subject-section">圖片類型</p>
       <div class="subject-btns">
-        <p class="each-btn" :class="subject.available === 'off' ? 'removeitem' : ''" v-for="(subject) in props.subjects" :key="subject.id">{{subject.name}}</p>
+        <p class="each-btn" :class="photo_type.available === 'off' ? 'removeitem' : ''" v-for="(photo_type) in props.photo_types" :key="photo_type.id">{{photo_type.name}}</p>
       </div>
     </div>
     <div class="filter-right">
-      <p class="addnewtag" @click="addNewLabel = true">新增標籤</p>
-      <p class="closetag" @click="photoRemoveModal = true">關閉標籤</p>
+      <p class="addnewtag" @click="addNewPhotoTypeModal = true">新增標籤</p>
+      <p class="closetag" @click="photoTypeRemoveModal = true">關閉標籤</p>
     </div>
   </div>
-  <div v-if="addNewLabel" class="modal">
+  <div v-if="addNewPhotoTypeModal" class="modal">
     <div class="modal-newgrade-content">
-      <span class="confirmation-close" @click="closeSubjectNewLbl">&times;</span>
-      <p class="grade-text">新增標籤：年級選擇</p>
+      <span class="confirmation-close" @click="closePhotoTypeNewLbl">&times;</span>
+      <p class="grade-text">新增標籤：圖片類型選擇</p>
       <div class="file-div">
-        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="輸入主題名稱">
+        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="Name of the photo">
       </div>
       <div class="btn-btn">
-        <p class="grade-btn" @click="addSubject">確認新增</p>
+        <p class="grade-btn" @click="addPhotoType">確認新增</p>
       </div>
     </div>
   </div>
-  <div v-if="photoRemoveModal" class="removeModal">
+  <div v-if="photoTypeRemoveModal" class="removeModal">
     <div class="modal-closelbl-content">
       <span class="confirmation-close" @click="closeRemove">&times;</span>
       <p class="closelbl-text">請選擇欲關閉之標籤</p>
-      <p class="sub-selection">科目選擇</p>
+      <p class="sub-selection">知識主題選擇</p>
       <div class="itemremove-block">
         <div class="filter1-left">
           <div class="subject1-btns">
-            {{toRemoveItem}}
-            <p :class="getButtonClass(subject)" class="each1-btn" @click="lblToRemoveFunc(subject)" v-for="subject in props.subjects" :key="subject.id">{{subject.name}}</p>
+            <p :class="getButtonClass(photo_type)" class="each1-btn" @click="photoTypeToRemoveFunc(photo_type)" v-for="photo_type in props.photo_types" :key="photo_type.id">{{photo_type.name}}</p>
           </div>
         </div>
       </div>
       <div class="confirm-div">
-        <p class="confirmRemove" @click="removeSubjectsFunc">確認關閉</p>
+        <p class="confirmRemove" @click="removeTopicsFunc">確認關閉</p>
       </div>
     </div>
   </div>
 
 </template>
-
 <style lang="scss" scoped>
 .filter-block {
   background: #FFD6A7;
@@ -407,3 +404,4 @@ const lblToRemoveFunc = (val) => {
     background: #000;
   }
 </style>
+

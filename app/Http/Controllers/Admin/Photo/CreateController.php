@@ -21,6 +21,7 @@ class CreateController extends Controller
                 'subject_id' => $request->subject_id,
                 'grade_id' => $request->grade_id,
                 'topic_id' => $request->topic_id,
+                'photo_type_id' => $request->photo_type_id,
                 'photo_format' => $request->file('photo_url')->getClientOriginalExtension(),
                 'photo_size' => getimagesize($request->file('photo_url'))[0] . 'x'. getimagesize($request->file('photo_url'))[1]
             ]);

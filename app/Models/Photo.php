@@ -12,7 +12,7 @@ class Photo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'generate_number','subject_id', 'grade_id', 'topic_id','public', 'photo_url', 'photo_type', 'photo_format', 'photo_size'];
+    protected $fillable = ['name', 'generate_number','subject_id', 'grade_id', 'topic_id', 'photo_type_id', 'public', 'photo_url', 'photo_format', 'photo_size'];
 
     public function grade()
     {
@@ -27,6 +27,11 @@ class Photo extends Model
     public function topic()
     {
         return $this->belongsTo(Topic::class);
+    }
+
+    public function photoType()
+    {
+        return $this->belongsTo(PhotoType::class);
     }
 
 

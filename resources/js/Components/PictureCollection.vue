@@ -36,9 +36,9 @@ const manageFunc = (val) => {
   <div class="picture-collection">
     <p class="collection-title">南一國中社會圖輯網</p>
     <div class="btn-block">
-      <p @click="manageFunc('pictureManage')" :class="currentActive == 'pictureManage' ? 'activecss' : ''" class="picture-management">圖片管理</p>
-      <p @click="manageFunc('featureImage')" :class="currentActive == 'featureImage' ? 'activecss' : ''" class="picture-management">精選圖片管理</p>
-      <p @click="manageFunc('editFilter')" :class="currentActive == 'editFilter' ? 'activecss' : ''" class="picture-management">編輯篩選器</p>
+      <a href="/admin/photo"><p @click="manageFunc('pictureManage')" :class="currentActive == 'pictureManage' ? 'activecss' : ''" class="picture-management">圖片管理</p></a>
+      <a href="/admin/feature-image"><p @click="manageFunc('featureImage')" :class="currentActive == 'featureImage' ? 'activecss' : ''" class="picture-management">精選圖片管理</p></a>
+      <a href="/admin/selector"><p @click="manageFunc('editFilter')" :class="currentActive == 'editFilter' ? 'activecss' : ''" class="picture-management">編輯篩選器</p></a>
 
     </div>
   </div>
