@@ -18,9 +18,9 @@ return new class extends Migration
             $table->integer('subject_id');
             $table->integer('grade_id');
             $table->integer('topic_id');
+            $table->string('photo_type_id');
             $table->enum('public', ['on', 'off'])->default('on');
             $table->string('photo_url')->nullable();
-            $table->string('photo_type')->nullable();
             $table->string('photo_format')->nullable();
             $table->string('photo_size')->nullable();
             $table->timestamps();

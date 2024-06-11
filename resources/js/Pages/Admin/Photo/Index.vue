@@ -33,6 +33,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  photo_typess: {
+    type: Object,
+    default: {},
+  },
   filters: {
     type: Object,
     default: {},
@@ -128,20 +132,6 @@ const photoType = ref('')
 const currentActive = ref('pictureManage')
 
 
-const typeoptions = [
-  {
-    value: 'type1',
-    label: 'type1',
-  },
-  {
-    value: 'type2',
-    label: 'type2',
-  },
-  {
-    value: 'type3',
-    label: 'type3',
-  }
-]
 const menuManage = (val) => {
   currentActive.value = val
 }
@@ -157,7 +147,7 @@ const photoAddForm = useForm({
     subject_id: '',
     grade_id: '',
     topic_id: '',
-    photo_type: ''
+    photo_type_id: ''
 });
 
 
@@ -338,7 +328,7 @@ const photoRemove = (photo) => {
                     年級：{{photo.grade.name}}
                   </p>
                   <p class="photo-info">
-                    圖片類型： {{photo.photo_type}}
+                    圖片類型： {{photo.photo_type.name}}
                   </p>
                   <p class="photo-info">
                     圖片格式：{{photo.photo_format}}
@@ -562,17 +552,17 @@ const photoRemove = (photo) => {
             />
           </el-select>
           <el-select
-            v-model="photoAddForm.photo_type"
+            v-model="photoAddForm.photo_type_id"
             placeholder="圖片類型"
             size="large"
             style="width: 240px"
             class="elselectwrapper2"
           >
             <el-option
-              v-for="item in typeoptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="photo_type in photo_typess"
+              :key="photo_type.value"
+              :label="photo_type.name"
+              :value="photo_type.id"
             />
           </el-select>
         </div>

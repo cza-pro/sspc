@@ -80,7 +80,7 @@ const closeRemove = () => {
   photoRemoveModal.value = false;
 };
 const propsData = () => {
-  props.grades.forEach(item => {
+  props.topics.forEach(item => {
     if (item.available == 'off') {
       toRemoveItem.value.push(item.id);
     }
@@ -232,7 +232,7 @@ const lblToRemoveFunc = (val) => {
   height: 100%;
   overflow: auto;
   // background-color: rgba(0, 0, 0, 0.8);
-  // backdrop-filter: blur(4px); 
+  // backdrop-filter: blur(4px);
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(2px); /* Apply blur effect */
 }
@@ -317,7 +317,7 @@ const lblToRemoveFunc = (val) => {
     font-weight: 400;
     font-size: 24px;
     color: #392F26;
-  } 
+  }
   .sub-selection {
     font-weight: 700;
     font-size: 1rem;

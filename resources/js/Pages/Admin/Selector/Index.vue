@@ -15,6 +15,7 @@ import MediumCardBoxModal from '@/Components/MediumCardBoxModal.vue';
 import SubjectTable from './Components/SubjectTable.vue';
 import GradeTable from './Components/GradeTable.vue';
 import TopicTable from './Components/TopicTable.vue';
+import PhotoTypeTable from './Components/PhotoTypeTable.vue';
 // import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue';
 import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue';
 import CardBox from "@/Components/CardBox.vue";
@@ -31,6 +32,10 @@ const props = defineProps({
     default: {}
   },
   topics: {
+    type: Object,
+    default: {}
+  },
+  photo_types: {
     type: Object,
     default: {}
   }
@@ -93,9 +98,12 @@ const grade = ref('')
         <TopicTable
           :topics="props.topics"
         />
+        <PhotoTypeTable
+          :photo_types="props.photo_types"
+        />
       </div>
     </div>
-    
+
   </div>
 
 </template>
@@ -231,8 +239,8 @@ const grade = ref('')
             background: #2BCF32;
           }
         }
-        
-        
+
+
       }
       .filter-block {
         background: #FFD6A7;
@@ -311,7 +319,7 @@ const grade = ref('')
       }
     }
   }
-  
+
   .modal-confirm-content {
     position: relative;
     background-color: #fff;
@@ -365,7 +373,7 @@ const grade = ref('')
     font-weight: 400;
     font-size: 24px;
     color: #392F26;
-  } 
+  }
   .sub-selection {
     font-weight: 700;
     font-size: 1rem;

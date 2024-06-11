@@ -9,9 +9,11 @@ use App\Http\Controllers\Admin\Selector\IndexController as SelectorIndexControll
 use App\Http\Controllers\Admin\Subject\CreateController as SubjectCreateController;
 use App\Http\Controllers\Admin\Grade\CreateController as GradeCreateController;
 use App\Http\Controllers\Admin\Topic\CreateController as TopicCreateController;
+use App\Http\Controllers\Admin\PhotoType\CreateController as PhotoTypeCreateController;
 use App\Http\Controllers\Admin\Subject\CloseController as SubjectCloseController;
 use App\Http\Controllers\Admin\Grade\CloseController as GradeCloseController;
 use App\Http\Controllers\Admin\Topic\CloseController as TopicCloseController;
+use App\Http\Controllers\Admin\PhotoType\CloseController as PhotoTypeCloseController;
 use App\Http\Controllers\Admin\FeatureImage\IndexController as FeatureImageIndexController;
 use App\Http\Controllers\Admin\FeatureImage\CreateController as FeatureImageCreateController;
 use App\Http\Controllers\Admin\FeatureImage\RemoveController as FeatureImageRemoveController;
@@ -38,10 +40,12 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::post('admin/subject/create', SubjectCreateController::class)->name('admin.subject.create');
     Route::post('admin/grade/create', GradeCreateController::class)->name('admin.grade.create');
     Route::post('admin/topic/create', TopicCreateController::class)->name('admin.topic.create');
+    Route::post('admin/photo-type/create', PhotoTypeCreateController::class)->name('admin.photo_type.create');
 
     Route::post('admin/subject/close', SubjectCloseController::class)->name('admin.subject.close');
     Route::post('admin/grade/close', GradeCloseController::class)->name('admin.grade.close');
     Route::post('admin/topic/close', TopicCloseController::class)->name('admin.topic.close');
+    Route::post('admin/photo-type/close', PhotoTypeCloseController::class)->name('admin.photo_type.close');
 
 
     Route::get('admin/feature-image', FeatureImageIndexController::class)->name('admin.feature_image.index');

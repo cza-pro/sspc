@@ -14,7 +14,8 @@ class UpdateController extends Controller
             'name' => $request->name,
             'subject_id' => $request->subject_id,
             'grade_id' => $request->grade_id,
-            'topic_id' => $request->topic_id
+            'topic_id' => $request->topic_id,
+            'photo_type_id' => $request->photo_type_id
         ]);
 
         return to_route('admin.photo.index')->with('toast', 'Photo Update !');
