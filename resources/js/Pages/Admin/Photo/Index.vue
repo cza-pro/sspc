@@ -202,6 +202,7 @@ const photoDeleteId = (photo) => {
 };
 
 const tdatest = ref('')
+const selectedFile = ref(null)
 
 
 const photoEdit = (photo) => {
@@ -266,7 +267,7 @@ const photoRemove = (photo) => {
 
 };
 
- const removePhotoFunc = () => {
+const removePhotoFunc = () => {
     console.log(photoAddForm.id);
    photoAddForm.post(route('admin.photo.remove', {
     photo: photoAddForm.id
@@ -288,9 +289,18 @@ const photoRemove = (photo) => {
   );
 };
 
+const onFileChange = (event) => {
+  // Update selectedFile with the chosen file
+  selectedFile.value = event.target.files[0];
+  // Do whatever you want with the file here
+  // For example, you can assign it to photo_url as you did before
+  photoAddForm.photo_url = selectedFile.value;
+}
+
 </script>
 
 <template>
+  <Head title="Photo" />
   <div class="photo-content">
     <div class="left-content">
       <PictureCollection @menu-manage="menuManage" currentActive="pictureManage" />
@@ -470,10 +480,10 @@ const photoRemove = (photo) => {
           </el-select>
         </div>
 
-        <button :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing"
-                @click="updatePhoto">
-            Update
-      </button>
+        <button class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing"
+          @click="updatePhoto">
+          Update
+        </button>
 
         <div class="photoinfo">
           <p>圖片格式：{{photoAddForm.photo_format}}</p>
@@ -501,7 +511,16 @@ const photoRemove = (photo) => {
         <span class="confirmation-close" @click="closeUpload">&times;</span>
         <p class="fname">檔案名稱：</p>
         <div class="file-div">
-          <p class="selectFile"><input type="file" @input="photoAddForm.photo_url = $event.target.files[0]" />選擇檔案</p>
+
+          <!-- <p class="selectFile"><input type="file" @input="photoAddForm.photo_url = $event.target.files[0]" />選擇檔案</p> -->
+
+          <label for="file-upload" class="custom-file-upload selectFile">
+            <!-- Add an image or text to display the selected file name -->
+            <span v-if="selectedFile">{{ selectedFile.name }}</span>
+            <span v-else>選擇檔案</span>
+          </label>
+          <input id="file-upload" type="file" style="display: none;" @change="onFileChange">
+
         </div>
         <p class="fname">圖片名稱</p>
         <input type="text" v-model="photoAddForm.name" id="photoAddForm.name" name="photoAddForm.name" class="photoName" placeholder="請輸入圖片名稱">
@@ -566,7 +585,7 @@ const photoRemove = (photo) => {
             />
           </el-select>
         </div>
-        <button @click="createPhoto" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
+        <button @click="createPhoto" class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
             Confirm
         </button>
         <div class="photoinfo">
@@ -596,9 +615,11 @@ const photoRemove = (photo) => {
 <style>
   .elselectwrapper1 .el-select__wrapper {
     border: 0 solid red !important;
+    border-radius: 14px;
   }
   .elselectwrapper2 .el-select__wrapper {
     border: 0 solid red !important;
+    border-radius: 14px;
   }
 
   .el-select__suffix {
@@ -606,6 +627,13 @@ const photoRemove = (photo) => {
     background-size: 100% 100%;
     width: 20px; /* Adjust icon size as needed */
     height: 10px;
+  }
+  select {
+    background-image: url('/images/admin/admin-dd.png');
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 21px 10px;
+    background-position-x: 114px;
   }
   .el-select__caret {
     display: none;
@@ -1041,6 +1069,17 @@ const photoRemove = (photo) => {
   .select1File {
     background: #000;
   }
+  .confirm-btn {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #FFF;
+    background: #FF7652;
+    width: 135px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 6px;
+    margin-top: 2rem;
+  }
   .fname {
     font-weight: 400;
     font-size: 1rem;
@@ -1097,10 +1136,12 @@ const photoRemove = (photo) => {
     color: #392F26;
 
     text-align: left;
-    margin-top: 3rem;
+    margin-top: 2rem;
   }
   .elselectwrapper1, .elselectwrapper2 {
     width: 150px !important;
+    border-radius: 14px;
+    border: 0 solid red !important;
     border-radius: 14px;
   }
   .elselectwrapper1 {
