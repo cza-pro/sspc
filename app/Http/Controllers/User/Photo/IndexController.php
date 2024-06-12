@@ -19,20 +19,23 @@ class IndexController extends Controller
 
         $data = Photo::query()
             ->when($request->filterSubject, function ($query, $filterSubject) {
-                $query->where('subject_id', $filterSubject);
+                $query->whereIn('subject_id', $filterSubject);
             })
             ->when($request->filterGrade, function ($query, $filterGrade) {
-                $query->where('grade_id', $filterGrade);
+                $query->whereIn('grade_id', $filterGrade);
             })
             ->when($request->filterTopic, function ($query, $filterTopic) {
-                $query->where('topic_id', $filterTopic);
+                $query->whereIn('topic_id', $filterTopic);
+            })
+            ->when($request->filterName, function ($query, $filterName) {
+                $query->whereIn('name', $filterName);
             })
             ->get();
 
 
-        $subjects = Subject::get();
-        $grades = Grade::get();
-        $topics = Topic::get();
+        $subjects = Subject::where('available', 'on')->get();
+        $grades = Grade::where('available', 'on')->get();
+        $topics = Topic::where('available', 'on')->get();
 
         $photos = PhotoResource::collection($data);
 
@@ -41,6 +44,7 @@ class IndexController extends Controller
             'subjects' => $subjects,
             'grades' => $grades,
             'topics' => $topics,
+            'filters' => $request->only(['filterSubject','filterGrade', 'filterTopic', 'filterName']),
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register')
 
