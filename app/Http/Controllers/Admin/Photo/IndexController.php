@@ -16,7 +16,22 @@ class IndexController extends Controller
     public function __invoke(Request $request)
     {
 
-        $photos = Photo::with('grade', 'subject', 'topic', 'photoType')->get();
+        $photos = Photo::query()
+            ->when($request->filterSubject, function ($query, $filterSubject) {
+                $query->whereIn('subject_id', $filterSubject);
+            })
+            ->when($request->filterGrade, function ($query, $filterGrade) {
+                $query->whereIn('grade_id', $filterGrade);
+            })
+            ->when($request->filterTopic, function ($query, $filterTopic) {
+                $query->whereIn('topic_id', $filterTopic);
+            })
+            ->when($request->filterPhotoType, function ($query, $filterPhotoType) {
+                $query->whereIn('photo_type_id', $filterPhotoType);
+            })
+            ->with('grade', 'subject', 'topic', 'photoType')
+            ->get();
+
         $subjectss = Subject::where('available', 'on')->get();
         $gradess = Grade::where('available', 'on')->get();
         $topicss = Topic::where('available', 'on')->get();
