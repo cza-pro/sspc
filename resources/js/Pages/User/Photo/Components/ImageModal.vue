@@ -1,9 +1,9 @@
 <template>
   <!-- <div > -->
     <div class="photo-block">
-      <div v-for="photo in results" :key="photo" :class="searchbar && searchbar === 'true'?'result-photo':'each-photo'">
+      <div v-for="photo in tempResult" :key="photo" :class="searchbar && searchbar === true?'result-photo':'each-photo'">
         <!-- Thumbnail Image -->
-        <div v-if="searchbar && searchbar === 'true'" class="each-image">
+        <div v-if="searchbar && searchbar === true" class="each-image">
           <div class="checked-css">
             <img v-if="photo.checkCondition" src="/images/checked.png" alt="checked" class="" @click="checkFunc(photo)" />
             <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div v-if="searchbar && searchbar === 'true'" >
+    <div v-if="searchbar && searchbar === true" >
       <div class="right-btn">
         <div class="btn-block" @click="downloadFunc">
           <img src="/images/download-btn.png" alt="download" class="dl-css" />
@@ -62,8 +62,8 @@
       <div>
         <el-pagination
           v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 12, 15, 20]"
+          v-model:page-size="resultsPerPage"
+          :page-sizes="[2, 4, 6, 8]"
           :small="false"
           :disabled="false"
           :background="true"
@@ -77,9 +77,9 @@
           <template v-slot>
             <div class="custom-sizes">
               <span>每頁顯示</span>
-              <el-select v-model="pageSize" placeholder="每頁顯示">
+              <el-select v-model="resultsPerPage" placeholder="每頁顯示">
                 <el-option
-                  v-for="size in [10, 20, 30, 40]"
+                  v-for="size in [2, 4, 6, 8]"
                   :key="size"
                   :label="`${size}`"
                   :value="size"
@@ -105,30 +105,32 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 
 // Props for thumbnail and full-size image URLs
 const props = defineProps({
   thumbnailSrc: String,
   fullImageSrc: String,
-  photo: [],
   results: Array,
   searchbar: Boolean
 });
 
 const currentPage = ref(1);
-const pageSize = ref(10);
-const totalItems = ref(400); // Example total item count
+const resultsPerPage = ref(4);
+const tempResult = ref(0);
+const totalItems = ref(5); // Example total item count
 
 const totalPages = computed(() => {
-  return Math.ceil(totalItems.value / pageSize.value);
+  return Math.ceil(totalItems.value / resultsPerPage.value);
 });
 
 const handleSizeChange = (newSize) => {
-  pageSize.value = newSize;
+  resultsPerPage.value = newSize;
+  paginationFunc();
 };
 
 const handleCurrentChange = (newPage) => {
+  console.log('Prev Next ', newPage)
   currentPage.value = newPage;
 };
 
@@ -306,6 +308,24 @@ const downloadGrayscaleImage = (url) => {
   };
 };
 
+const paginationFunc = () => {
+  // Calculate the start and end indices for the current page
+  const startIndex = (currentPage.value - 1) * resultsPerPage.value;
+  const endIndex = startIndex + resultsPerPage.value;
+
+  // Slice the results array to get the data for the current page
+  tempResult.value = props.results.slice(startIndex, endIndex);
+}
+watch(() => resultsPerPage.value, (newValue) => {
+  handleSizeChange(newValue);
+});
+onMounted(() => {
+  if(!props.searchbar) {
+    tempResult.value = [...props.results]
+  } else {
+    paginationFunc();
+  }
+})
 </script>
 
 <style scoped>

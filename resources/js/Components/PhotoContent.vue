@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { watch, computed, ref } from "vue";
 import ImageModal from '../Pages/User/Photo/Components/ImageModal.vue';
 import ImageModal1 from '../Pages/User/Photo/Components/ImageModal1.vue';
 import { defineProps } from 'vue';
@@ -18,9 +18,17 @@ const props = defineProps({
 
 const activeNames = ref(['1', '2'])
 const checkList = ref([])
+const searchbar = ref(false)
 const handleChange = (val) => {
   console.log(val)
 }
+
+// const searchBoo = computed(() => props.searchName);
+// console.log('he ', searchBoo.value)
+
+watch(() => props.searchName, (newValue) => {
+  searchbar.value = (newValue && newValue !== '') ? true : false;
+});
 </script>
 
 <template>
@@ -34,8 +42,7 @@ const handleChange = (val) => {
           <ImageModal
             thumbnailSrc="/images/photo1.png"
             fullImageSrc="/images/photo1.png"
-            :photo="photo"
-            searchbar="true"
+            :searchbar="searchbar"
             :results="results"
           />
         <!-- </div> -->
@@ -45,7 +52,7 @@ const handleChange = (val) => {
           <ImageModal
             thumbnailSrc="/images/photo1.png"
             fullImageSrc="/images/photo1.png"
-            searchbar="false"
+            :searchbar="searchbar"
             :results="results"
           />
         <!-- </div> -->
