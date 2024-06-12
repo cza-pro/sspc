@@ -1,56 +1,151 @@
 <script setup>
-import { mdiLogout, mdiClose } from "@mdi/js";
-import { computed } from "vue";
-import { useStyleStore } from "@/Stores/style.js";
-import AsideMenuList from "@/Components/AsideMenuList.vue";
-import AsideMenuItem from "@/Components/AsideMenuItem.vue";
-import BaseIcon from "@/Components/BaseIcon.vue";
-defineProps({
+import { computed, ref } from "vue";
+import { defineProps } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
 
+const props = defineProps({
+  subjects: {
+    type: Array,
+    required: true
+  },
+  grades: {
+    type: Array,
+    required: true
+  },
+  topics: {
+    type: Array,
+    required: true
+  },
+  photo_types: {
+    type: Array,
+    required: true
+  }
 });
+
+const activeNames = ref(['1', '2'])
+const filterSubject = ref([])
+const filterGrade = ref([])
+const filterTopic = ref([])
+const filterPhotoType = ref([])
+
+const handleChange = (val) => {
+  console.log(val)
+}
+
+const filterSearch = () => {
+    router.get(route('admin.photo.index'), {
+        filterSubject: filterSubject.value.id,
+        filterGrade: filterGrade.value.id,
+        filterTopic: filterTopic.value.id,
+        filterPhotoType: filterPhotoType.value.id,
+    },{
+        preserveState: true,
+        replace: true,
+    });
+}
+
 </script>
 
 <template>
-    <Head title="Side Bar" />
+  <div class="home-left-component">
+    <div class="search-row">
+      <div class="filter-div">
+        <img src="/images/filter-icon.png" alt="Filter" class="filter-img">
+        <p class="filter-text">篩選</p>
+      </div>
+      <p class="search-btn" @click="filterSearch">
+        搜尋
+      </p>
+    </div>
 
-   <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-      <ul class="space-y-2 font-medium">
-         <li>
-            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-               </svg>
-               <a class="ms-3" href="/admin/photo">Picture Management</a>
-               <span class="ms-3 haha">Picture Management</span>
-               <h1>hello</h1>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
-               </svg>
-               <a href="/feature-photo/">Feature Image Magement</a>
-               <span class="flex-1 ms-3 whitespace-nowrap">Feature Image Magement</span>
-               <span class="inline-flex items-center justify-center px-2 text-sm font-medium text-gray-800 bg-gray-100 rounded-full ms-3 dark:bg-gray-700 dark:text-gray-300">Pro</span>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
-               </svg>
-               <span class="flex-1 ms-3 whitespace-nowrap">Filter Management</span>
-               <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full ms-3 dark:bg-blue-900 dark:text-blue-300">3</span>
-            </a>
-         </li>
-      </ul>
-   </div>
-</aside>
+    <div class="demo-collapse">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="科目" name="1">
+          <el-checkbox-group v-model="filterSubject.id" class="check-css" v-for="subject in subjects" :key="subject.id">
+            <el-checkbox :label="subject.name" :value="subject.id" :name="subject.id" class="custom-checkbox" />
+          </el-checkbox-group>
+        </el-collapse-item>
+
+        <el-collapse-item title="年級" name="2">
+          <el-checkbox-group v-model="filterGrade.id" class="check-css" v-for="grade in grades" :key="grade.id">
+            <el-checkbox :label="grade.name" :value="grade.id" :name="grade.id" class="custom-checkbox" />
+          </el-checkbox-group>
+        </el-collapse-item>
+
+        <el-collapse-item title="知識主題" name="3">
+          <el-checkbox-group v-model="filterTopic.id" class="check-css" v-for="topic in topics" :key="topic.id">
+            <el-checkbox :label="topic.name" :value="topic.id"  :name="topic.id" class="custom-checkbox" />
+          </el-checkbox-group>
+        </el-collapse-item>
+
+        <el-collapse-item title="圖片類型" name="4">
+          <el-checkbox-group v-model="filterPhotoType.id" class="check-css" v-for="photo_type in photo_types" :key="photo_type.id">
+            <el-checkbox :label="photo_type.name" :value="photo_type.id" :name="photo_type.id" class="custom-checkbox" />
+          </el-checkbox-group>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+
+  </div>
 </template>
-
 <style>
+  .el-collapse-item__header {
+      border-bottom: none !important;
+      color: #D0D0D0;
+      font-weight: 700;
+      font-size: 20px;
+      height: 45px;
+      line-height: 45px;
+  }
+  .el-collapse-item__arrow {
+      margin: 0 8px 0 auto;
+      transition: transform 0.3s;
+      font-weight: 300;
+      transform: rotate(90deg);
+  }
+  .el-collapse-item__arrow {
+    margin: 0 8px 0 auto;
+    transition: transform 0.3s;
+    font-weight: 300;
+    transform: rotate(90deg);
+  }
+  .el-collapse-item__arrow {
+    font-size: 2rem;
+  }
+  .el-checkbox:last-of-type {
+    margin-right: 30px;
+  }
+  .el-checkbox__inner {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #B3B3B3;
+      border-radius: 6px;
+  }
+  .el-collapse {
+    border-top: 0 solid #333;
+  }
 
+  .el-collapse-item {
+      border-bottom: 1px solid var(--el-collapse-border-color);
+  }
+  .el-collapse-item__wrap {
+      border-bottom: 0 solid var(--el-collapse-border-color);
+  }
+  .el-checkbox__inner:after {
+    left: 43%;
+    top: 28%;
+  }
+
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #00A15D;
+    border-color: #00A15D;
+  }
+  .el-checkbox {
+    --el-checkbox-checked-text-color: #00A15D;
+  }
+</style>
+<style scoped>
+.demo-collapse {
+  margin: 0 0 0 10px;
+}
 </style>

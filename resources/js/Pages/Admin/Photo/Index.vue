@@ -4,6 +4,7 @@ import { Head, Link, router, useForm , usePage} from "@inertiajs/vue3";
 import { reactive, ref, watch } from "vue";
 import PictureCollection from "../../../Components/PictureCollection.vue";
 import MySelector from "../../../Components/MySelector.vue";
+import SideBar from "../Menu/SideBar.vue";
 import moment from 'moment';
 import toast from '@/Stores/toast';
 
@@ -79,48 +80,7 @@ const removePhotoCancelFunc = () => {
 };
 
 const statusRef = ref("");
-const results = ref([
-  {
-    id: 1,
-    name: '1',
-    title: 'CZA',
-    content: 'Content for item 1',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 2,
-    name: '1',
-    title: 'TDA',
-    content: 'Content for item 2',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 3,
-    name: '1',
-    title: 'MMM',
-    content: 'Content for item 3',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 4,
-    name: '1',
-    title: 'MMLM',
-    content: 'Content for item 4',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 5,
-    name: '1',
-    title: 'KT',
-    content: 'Content for item 5',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  }
-]);
+
 const initialSearchQuery = ref('');
 const searchName = ref('');
 
@@ -304,7 +264,8 @@ const onFileChange = (event) => {
   <div class="photo-content">
     <div class="left-content">
       <PictureCollection @menu-manage="menuManage" currentActive="pictureManage" />
-      <MySelector :results="results" :searchName="searchName" />
+      <!-- <MySelector :results="results" :searchName="searchName" /> -->
+      <SideBar :subjects="subjectss" :grades="gradess" :topics="topicss" :photo_types="photo_typess"/>
     </div>
     <div class="right-content">
       <div v-if="currentActive == 'pictureManage'">
