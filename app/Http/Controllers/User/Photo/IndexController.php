@@ -50,8 +50,8 @@ class IndexController extends Controller
             'subjects' => $subjects,
             'grades' => $grades,
             'topics' => $topics,
-            'photo_typess' => $photo_types,
-            'filters' => $request->only(['filterSubject','filterGrade', 'filterTopic', 'filterName']),
+            'photo_types' => $photo_types,
+            'filters' => $request->only(['filterSubject','filterGrade', 'filterTopic', 'filterPhotoType', 'filterName']),
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register')
 
