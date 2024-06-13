@@ -1,15 +1,15 @@
 <template>
   <!-- <div > -->
     <div class="photo-block">
-      <div v-for="photo in tempResult" :key="photo" :class="searchbar && searchbar === true?'result-photo':'each-photo'">
+      <div v-for="photo in tempResult" :key="photo" :class="((searchbar && searchbar === true) || (selectorBool && selectorBool === true))?'result-photo':'each-photo'">
         <!-- Thumbnail Image -->
-        <div v-if="searchbar && searchbar === true" class="each-image">
+        <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" class="each-image">
           <div class="checked-css">
             <img v-if="photo.checkCondition" src="/images/checked.png" alt="checked" class="" @click="checkFunc(photo)" />
             <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
           </div>
           <div class="photo-block1">
-            <img :src="thumbnailSrc" @click="showModal = true" alt="Filter" class="thumbnail" />
+            <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
             <div class="photo-data">
               <p class="photo-title">{{photo.title}}</p>
               <p class="photo-content">{{photo.content}}</p>
@@ -17,7 +17,10 @@
           </div>
         </div>
         <div v-else>
-          <img :src="thumbnailSrc" @click="showModal = true" alt="Filter" class="thumbnail" />
+          <!-- {{photo.subject.name}}
+          {{photo.grade.name}}
+          {{photo.photo_type.name}} -->
+          <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
         </div>
 
         <!-- Modal -->
@@ -50,7 +53,7 @@
       </div>
     </div>
 
-    <div v-if="searchbar && searchbar === true" >
+    <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" >
       <div class="right-btn">
         <div class="btn-block" @click="downloadFunc">
           <img src="/images/download-btn.png" alt="download" class="dl-css" />
@@ -109,10 +112,13 @@ import { ref, watch, computed, onMounted } from 'vue';
 
 // Props for thumbnail and full-size image URLs
 const props = defineProps({
-  thumbnailSrc: String,
   fullImageSrc: String,
-  results: Array,
-  searchbar: Boolean
+  photos: {
+    type: Object,
+    default: {},
+  },
+  searchbar: Boolean,
+  selectorBool: Boolean
 });
 
 const currentPage = ref(1);
@@ -157,14 +163,14 @@ const closeSelected = () => {
 };
 
 const checkFunc = (item) => {
-  const index = props.results.findIndex(result => result.id === item.id);
+  const index = props.photos.findIndex(result => result.id === item.id);
   if (index !== -1) {
-    console.log("good luck CZA ", props.results[index].id);
+    console.log("good luck CZA ", props.photos[index].id);
     console.log("good luck TDA ", item.id);
     console.log("good luck ", index);
 
     // Toggle the checkCondition property
-    props.results[index].checkCondition = !props.results[index].checkCondition;
+    props.photos[index].checkCondition = !props.photos[index].checkCondition;
   } else {
     console.log("Item not found in the array");
   }
@@ -182,8 +188,8 @@ const downloadBothVersions = () => {
 };
 
 const downloadFunc = () => {
-  // Filter the props.results array to get items where checkCondition is true
-  selectedItems.value = props.results
+  // Filter the props.photos array to get items where checkCondition is true
+  selectedItems.value = props.photos
     .filter(item => item.checkCondition === true)
     .map(item => item.srcPath);
 
@@ -313,15 +319,35 @@ const paginationFunc = () => {
   const startIndex = (currentPage.value - 1) * resultsPerPage.value;
   const endIndex = startIndex + resultsPerPage.value;
 
-  // Slice the results array to get the data for the current page
-  tempResult.value = props.results.slice(startIndex, endIndex);
+  // Slice the photos array to get the data for the current page
+  tempResult.value = props.photos.slice(startIndex, endIndex);
 }
-watch(() => resultsPerPage.value, (newValue) => {
-  handleSizeChange(newValue);
+// watch(() => resultsPerPage.value, (newValue) => {
+//   handleSizeChange(newValue);
+// });
+
+
+// watch([() => resultsPerPage.value, () => props.photos], ([newResultsPerPage, newPhotos], [oldResultsPerPage, oldPhotos]) => {
+//     handleSizeChange(newResultsPerPage);
+    
+//     console.log('Watch:', newPhotos);
+// });
+
+
+watch([() => resultsPerPage.value], ([newResultsPerPage], [oldResultsPerPage]) => {
+    // Handle the changes in resultsPerPage
+    handleSizeChange(newResultsPerPage);
 });
+watch([() => props.photos], ([newPhotos], [oldPhotos]) => {
+    // Log the changes in props.photos
+    console.log('Watch:', newPhotos);
+    tempResult.value = [...newPhotos]
+});
+
+
 onMounted(() => {
   if(!props.searchbar) {
-    tempResult.value = [...props.results]
+    tempResult.value = [...props.photos]
   } else {
     paginationFunc();
   }

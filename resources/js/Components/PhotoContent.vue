@@ -6,54 +6,56 @@ import { defineProps } from 'vue';
 
 // Define props
 const props = defineProps({
-  results: {
-    type: Array,
-    required: true
+  photos: {
+    type: Object,
+    default: {},
   },
   searchName: {
     type: String,
     required: true
+  },
+  selectorBool: {
+    type: Boolean
   }
 });
 
-const activeNames = ref(['1', '2'])
-const checkList = ref([])
 const searchbar = ref(false)
-const handleChange = (val) => {
-  console.log(val)
-}
 
 // const searchBoo = computed(() => props.searchName);
 // console.log('he ', searchBoo.value)
 
 watch(() => props.searchName, (newValue) => {
-  searchbar.value = (newValue && newValue !== '') ? true : false;
+  searchbar.value = (newValue && (newValue !== '')) ? true : false;
+});
+watch(() => props.selectorBool, (newValue) => {
 });
 </script>
 
 <template>
   <div class="home-right-component">
-    <div v-if="results.length" class="content-width">
+    <div v-if="props.photos.length" class="content-width">
       <p class="right-title">
         搜尋結果
       </p>
-      <div v-if="searchName && searchName !== ''">
-        <!-- <div v-for="photo in results" :key="photo" class="result-photo"> -->
+      <div v-if="props.selectorBool && props.selectorBool == true">
+        <!-- <div v-for="photo in props.photos" :key="photo" class="each-photo"> -->
           <ImageModal
-            thumbnailSrc="/images/photo1.png"
             fullImageSrc="/images/photo1.png"
             :searchbar="searchbar"
-            :results="results"
+            :photos="props.photos"
+            :selectorBool="props.selectorBool"
           />
         <!-- </div> -->
       </div>
       <div v-else>
-        <!-- <div v-for="photo in results" :key="photo" class="each-photo"> -->
+        <!-- <div v-for="photo in props.photos" :key="photo" class="result-photo"> -->
+          <!-- selector => {{selectorBool}}<br>
+          searchBar => {{searchbar}}<br>
+          hey -->
           <ImageModal
-            thumbnailSrc="/images/photo1.png"
             fullImageSrc="/images/photo1.png"
             :searchbar="searchbar"
-            :results="results"
+            :photos="props.photos"
           />
         <!-- </div> -->
       </div>
@@ -69,7 +71,6 @@ watch(() => props.searchName, (newValue) => {
         <div v-for="i in 4" :key="i" class="each-photo">
           <!-- <img src="/images/photo1.png" alt="Filter" class="photo-img"> -->
           <ImageModal1
-            thumbnailSrc="/images/test-img.png"
             fullImageSrc="/images/test-img.png"
           />
         </div>

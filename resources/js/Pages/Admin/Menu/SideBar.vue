@@ -19,6 +19,9 @@ const props = defineProps({
   photo_types: {
     type: Array,
     required: true
+  },
+  userType: {
+    type: String
   }
 });
 
@@ -28,11 +31,27 @@ const filterGrade = ref([])
 const filterTopic = ref([])
 const filterPhotoType = ref([])
 
-const handleChange = (val) => {
-  console.log(val)
-}
+const emit = defineEmits(["selector-value"]);
 
 const filterSearch = () => {
+  if(props.userType && props.userType == 'userType') {
+    emit('selector-value', {
+      subject: filterSubject?.value?.id,
+      grade: filterGrade?.value?.id,
+      topic: filterTopic?.value?.id,
+      type: filterPhotoType?.value?.id
+    });
+
+    router.get(route('photo.index'), {
+      filterSubject: filterSubject.value.id,
+      filterGrade: filterGrade.value.id,
+      filterTopic: filterTopic.value.id,
+      filterPhotoType: filterPhotoType.value.id,
+    },{
+      preserveState: true,
+      replace: true,
+    });
+  } else {
     router.get(route('admin.photo.index'), {
         filterSubject: filterSubject.value.id,
         filterGrade: filterGrade.value.id,
@@ -42,6 +61,7 @@ const filterSearch = () => {
         preserveState: true,
         replace: true,
     });
+  }
 }
 
 </script>
