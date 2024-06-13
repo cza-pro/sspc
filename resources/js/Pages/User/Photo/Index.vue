@@ -20,6 +20,7 @@ import CardBox from "@/Components/CardBox.vue";
 
 import MyNavBar from "./Components/MyNavBar.vue"
 import MySelector from "../../../Components/MySelector.vue"
+import SideBar from "../../Admin/Menu/SideBar.vue";
 import PhotoContent from '../../../Components/PhotoContent.vue'
 
 const props = defineProps({
@@ -30,6 +31,26 @@ const props = defineProps({
     type: Boolean,
   },
   photos: {
+    type: Object,
+    default: {},
+  },
+  filters: {
+    type: Object,
+    default: {},
+  },
+  subjects: {
+    type: Object,
+    default: {},
+  },
+  grades: {
+    type: Object,
+    default: {},
+  },
+  topics: {
+    type: Object,
+    default: {},
+  },
+  photo_types: {
     type: Object,
     default: {},
   },
@@ -48,6 +69,18 @@ const nameRef = ref("");
 const closeModal = () => {
   isDepartmentCreateModalActive.value = false;
   form.reset();
+};
+
+const selectorFunc = (value) => {
+  const hasValue = ['subject', 'grade', 'topic', 'type'].some(key => value[key] && value[key].length);
+  
+  if (hasValue) {
+    selectorBool.value = true;
+    // console.log("Emit At least one value is defined");
+  } else {
+    selectorBool.value = false
+    // console.log("Emit All four values are undefined");
+  }
 };
 
 const results = ref([
@@ -94,6 +127,7 @@ const results = ref([
 ]);
 const initialSearchQuery = ref('');
 const searchName = ref('');
+const selectorBool = ref(false);
 
 
 // Function to handle the search query update from the child component
@@ -168,7 +202,8 @@ const handleSearchQuery = async (query) => {
   <Head title="Nani" />
   <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
   <div class="home-content">
-    <MySelector :results="results" :searchName="searchName" />
-    <PhotoContent :results="results" :searchName="searchName" />
+    <!-- <MySelector :results="results" :searchName="searchName" /> -->
+    <SideBar userType="userType" :subjects="subjects" :grades="grades" :topics="topics" :photo_types="photo_types" @selector-value="selectorFunc" />
+    <PhotoContent :photos="photos.data" :searchName="searchName" :selectorBool="selectorBool" />
   </div>
 </template>
