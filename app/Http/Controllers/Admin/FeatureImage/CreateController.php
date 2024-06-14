@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\FeatureImage;
 
-use App\Http\Controllers\Controller;
-use App\Models\FeatureImage;
-use Illuminate\Http\Request;
-use App\Services\Image\ImageService;
 use Illuminate\Support\Str;
+use App\Models\FeatureImage;
+use App\Http\Controllers\Controller;
+use App\Services\Image\ImageService;
+use App\Http\Requests\FeatureImage\CreateRequest;
 
 class CreateController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(CreateRequest $request)
     {
 
         if($request->hasFile('feature_image')) {
