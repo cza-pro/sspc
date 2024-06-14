@@ -7,6 +7,8 @@ import MySelector from "../../../Components/MySelector.vue";
 import SideBar from "../Menu/SideBar.vue";
 import moment from 'moment';
 import toast from '@/Stores/toast';
+import InputError from '@/Components/InputError.vue';
+
 
 const props = defineProps({
   canLogin: {
@@ -117,16 +119,16 @@ const createPhoto = () => {
     preserveState: true,
     onSuccess: () => {
        closeUpload();
+        photoAddForm.reset(),
        toast.add({
           message: usePage().props.toast.message
        });
     },
     onError: () => {
-       photoAddForm.reset(),
        toast.add({
-          message: usePage().props.toast.message
+          message: "erros please try again"
        });
-       closeUpload()
+    //    closeUpload()
     }
   })
 }
@@ -481,70 +483,93 @@ const onFileChange = (event) => {
             <span v-else>選擇檔案</span>
           </label>
           <input id="file-upload" type="file" style="display: none;" @change="onFileChange">
-
         </div>
+        <InputError :message="photoAddForm.errors.photo_url" class="mt-2" />
+
         <p class="fname">圖片名稱</p>
         <input type="text" v-model="photoAddForm.name" id="photoAddForm.name" name="photoAddForm.name" class="photoName" placeholder="請輸入圖片名稱">
+        <br>
+        <InputError :message="photoAddForm.errors.name" class="mt-2" />
+
         <div class="selection-block">
 
-          <el-select
-            v-model="photoAddForm.subject_id"
-            placeholder="科目"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper1"
-          >
-            <el-option
-              v-for="subject in subjectss"
-              :key="subject.value"
-              :label="subject.name"
-              :value="subject.id"
-            />
-          </el-select>
-          <el-select
-            v-model="photoAddForm.grade_id"
-            placeholder="年級"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper2"
-          >
-            <el-option
-              v-for="grade in gradess"
-              :key="grade.value"
-              :label="grade.name"
-              :value="grade.id"
-            />
-          </el-select>
+            <div>
+            <el-select
+                v-model="photoAddForm.subject_id"
+                placeholder="科目"
+                size="large"
+                style="width: 240px"
+                class="elselectwrapper1"
+                name="subject_id"
+            >
+                <el-option
+                v-for="subject in subjectss"
+                :key="subject.value"
+                :label="subject.name"
+                :value="subject.id"
+                />
+            </el-select>
+                <InputError :message="photoAddForm.errors.subject_id"/>
+            </div>
+            <div>
+            <el-select
+                v-model="photoAddForm.grade_id"
+                placeholder="年級"
+                size="large"
+                style="width: 240px"
+                class="elselectwrapper2"
+                name="grade_id"
+            >
+                <el-option
+                v-for="grade in gradess"
+                :key="grade.value"
+                :label="grade.name"
+                :value="grade.id"
+                />
+            </el-select>
+            <InputError :message="photoAddForm.errors.grade_id"/>
+            </div>
+
         </div>
         <div class="selection-block">
-          <el-select
-            v-model="photoAddForm.topic_id"
-            placeholder="知識主題"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper1"
-          >
-            <el-option
-              v-for="topic in topicss"
-              :key="topic.value"
-              :label="topic.name"
-              :value="topic.id"
-            />
-          </el-select>
-          <el-select
-            v-model="photoAddForm.photo_type_id"
-            placeholder="圖片類型"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper2"
-          >
-            <el-option
-              v-for="photo_type in photo_typess"
-              :key="photo_type.value"
-              :label="photo_type.name"
-              :value="photo_type.id"
-            />
-          </el-select>
+            <div>
+                <el-select
+                    v-model="photoAddForm.topic_id"
+                    placeholder="知識主題"
+                    size="large"
+                    style="width: 240px"
+                    class="elselectwrapper1"
+                    name="topic_id"
+                >
+                    <el-option
+                    v-for="topic in topicss"
+                    :key="topic.value"
+                    :label="topic.name"
+                    :value="topic.id"
+                    />
+                </el-select>
+                <InputError :message="photoAddForm.errors.topic_id"/>
+            </div>
+
+            <div>
+                <el-select
+                    v-model="photoAddForm.photo_type_id"
+                    placeholder="圖片類型"
+                    size="large"
+                    style="width: 240px"
+                    class="elselectwrapper2"
+                    name="photo_type_id"
+                >
+                    <el-option
+                    v-for="photo_type in photo_typess"
+                    :key="photo_type.value"
+                    :label="photo_type.name"
+                    :value="photo_type.id"
+                    />
+                </el-select>
+                <InputError :message="photoAddForm.errors.photo_type_id"/>
+            </div>
+
         </div>
         <button @click="createPhoto" class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
             Confirm
