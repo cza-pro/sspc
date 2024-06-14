@@ -53,11 +53,7 @@ const props = defineProps({
   photo_types: {
     type: Object,
     default: {},
-  },
-  filters: {
-    type: Object,
-    default: {},
-  },
+  }
 });
 
 const statusRef = ref("");
@@ -65,6 +61,7 @@ let changeStatusRef = (value) => {
   statusRef.value = value;
 };
 const nameRef = ref("");
+const searchTemp = ref("");
 
 const closeModal = () => {
   isDepartmentCreateModalActive.value = false;
@@ -135,51 +132,11 @@ const handleSearchQuery = async (query) => {
   if (query) {
     // await fetchResults(query);
     searchName.value = query
-    results.value = results.value.filter(item => item.name.includes(query));
+    searchTemp.value = props.photos.data.filter(item => item.name.includes(query));
+    console.log('if query ', searchTemp.value)
   } else {
+    console.log('else empty ', props.photos.length)
     searchName.value = ''
-    results.value = [
-      {
-        id: 1,
-        name: '1',
-        title: 'CZA',
-        content: 'Content for item 1',
-        srcPath: '/images/photo1.png',
-        checkCondition: false
-      },
-      {
-        id: 2,
-        name: '1',
-        title: 'TDA',
-        content: 'Content for item 2',
-        srcPath: '/images/photo1.png',
-        checkCondition: false
-      },
-      {
-        id: 3,
-        name: '1',
-        title: 'MMM',
-        content: 'Content for item 3',
-        srcPath: '/images/photo1.png',
-        checkCondition: false
-      },
-      {
-        id: 4,
-        name: '1',
-        title: 'MMLM',
-        content: 'Content for item 4',
-        srcPath: '/images/photo1.png',
-        checkCondition: false
-      },
-      {
-        id: 5,
-        name: '1',
-        title: 'KT',
-        content: 'Content for item 5',
-        srcPath: '/images/photo1.png',
-        checkCondition: false
-      }
-    ];
   }
 }
 
