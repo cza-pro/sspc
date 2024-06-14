@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link,router, useForm } from "@inertiajs/vue3";
+import debounce from 'lodash/debounce'
 
 // Defining primitive values with ref
 const loginState = ref(false);  // Similar to data { return { loginState: true } } in Vue 2
@@ -104,6 +105,17 @@ function logoutFunc() {
 //   logoutFunc,
 //   dropdownFunc
 // };
+
+
+watch([searchName], debounce(function([searchNameValue]) {
+    router.get(route('photo.index'), {
+      searchName: searchNameValue
+    }, {
+      preserveScroll: true,
+      preserveState: true,
+      replace: true,
+    })
+  }, 2000));
 
 </script>
 
