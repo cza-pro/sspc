@@ -31,10 +31,11 @@ class IndexController extends Controller
             ->when($request->filterPhotoType, function ($query, $filterPhotoType) {
                 $query->whereIn('photo_type_id', $filterPhotoType);
             })
-            ->when($request->filterName, function ($query, $filterName) {
-                $query->whereIn('name', $filterName);
+            ->when($request->searchName, function ($query, $searchName) {
+                $query->where('name', 'like', "%$searchName%");
             })
             ->with('grade', 'subject', 'topic', 'photoType')
+            ->where('public', 'on')
             ->get();
 
 
