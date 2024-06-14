@@ -4,6 +4,7 @@ import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
   topics: {
@@ -41,12 +42,13 @@ const addTopic = () => {
     preserveState: true,
     onSuccess: () => {
       closeTopicNewLbl();
+      addForm.reset();
       toast.add({
         message: usePage().props.toast.message
       });
     },
     onError: () => {
-      addForm.reset(),
+    //   addForm.reset(),
       toast.add({
         message: usePage().props.toast.message
       });
@@ -118,8 +120,9 @@ const lblToRemoveFunc = (val) => {
       <span class="confirmation-close" @click="closeTopicNewLbl">&times;</span>
       <p class="grade-text">新增標籤：年級選擇</p>
       <div class="file-div">
-        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="Name of the photo">
+        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="Topic Name">
       </div>
+        <InputError :message="addForm.errors.name"/>
       <div class="btn-btn">
         <p class="grade-btn" @click="addTopic">確認新增</p>
       </div>
@@ -300,7 +303,7 @@ const lblToRemoveFunc = (val) => {
   .btn-btn {
     display: flex;
     justify-content: center;
-    margin-top: 6rem;
+    margin-top: 5rem;
   }
   .grade-btn {
     font-weight: 700;

@@ -32,7 +32,7 @@ class CreateRequest extends FormRequest
     {
         $messages =[];
 
-        $messages['name.required'] = 'အမည် ထည့်ပါ။';
+        $messages['name.required'] = 'Please Photo Type';
 
 
         return $messages;

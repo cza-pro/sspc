@@ -4,6 +4,7 @@ import toast from '@/Stores/toast';
 import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
   subjects: {
@@ -12,7 +13,7 @@ const props = defineProps({
   }
 })
 const addForm = useForm({
-  name: '四年級'
+  name: ''
 });
 const checkedSubject = ref([])
 const addNewLabel = ref(false);
@@ -41,6 +42,7 @@ const addSubject = () => {
     preserveState: true,
     onSuccess: () => {
        closeSubjectNewLbl();
+       addForm.reset();
        toast.add({
           message: usePage().props.toast.message
        });
@@ -121,6 +123,7 @@ const lblToRemoveFunc = (val) => {
       <div class="file-div">
         <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="輸入主題名稱">
       </div>
+        <InputError :message="addForm.errors.name"/>
       <div class="btn-btn">
         <p class="grade-btn" @click="addSubject">確認新增</p>
       </div>
@@ -303,7 +306,7 @@ const lblToRemoveFunc = (val) => {
   .btn-btn {
     display: flex;
     justify-content: center;
-    margin-top: 6rem;
+    margin-top: 5rem;
   }
   .grade-btn {
     font-weight: 700;

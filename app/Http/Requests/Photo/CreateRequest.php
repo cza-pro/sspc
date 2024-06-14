@@ -22,7 +22,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "name" => ["required"]
+            "name" => ["required"],
+            "subject_id" => ["required"],
+            "grade_id" => ["required"],
+            "topic_id" => ["required"],
+            "photo_type_id" => ["required"],
+            "photo_url" => ["required"]
         ];
 
         return $rules;
@@ -32,7 +37,12 @@ class CreateRequest extends FormRequest
     {
         $messages =[];
 
-        $messages['name.required'] = 'အမည် ထည့်ပါ။';
+        $messages['name.required'] = 'Please enter Name';
+        $messages['subject_id.required'] = 'Please Select Subject';
+        $messages['grade_id.required'] = 'Please select Grade';
+        $messages['topic_id.required'] = 'Please select topic';
+        $messages['photo_type_id.required'] = 'Please select photo type';
+        $messages['photo_url.required'] = 'Please Select Photo';
 
 
         return $messages;
