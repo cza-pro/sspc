@@ -20,6 +20,8 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
 import PictureCollection from "../../../../Components/PictureCollection.vue";
 import MySelector from "../../../../Components/MySelector.vue";
 import moment from 'moment';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
 
@@ -33,6 +35,8 @@ const props = defineProps({
 const photoDeleteModal = ref(false);
 const photoRemoveModal = ref(false);
 const fea_img = ref();
+const $toast = useToast();
+
 
 const closeDelete = () => {
   photoDeleteModal.value = false;
@@ -68,8 +72,12 @@ const removeFeatureImageFunc = (feature_image) => {
     }),
     {
       onSuccess: () => {
-          toast.add({
-            message: "Remove Feature Image!",
+         $toast.info("remove photo",{
+            message: "Remove Photo Successfully!!",
+            type: "info",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
         });
         closeRemove();
       },
@@ -91,8 +99,12 @@ const deleteFeatureImageFunc = (feature_image) => {
     }),
     {
       onSuccess: () => {
-          toast.add({
-            message: "Remove Feature Image!",
+        $toast.warning("delete photo",{
+            message: "Delete Photo Successfully!!",
+            type: "warning",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
         });
         closeDelete();
       },

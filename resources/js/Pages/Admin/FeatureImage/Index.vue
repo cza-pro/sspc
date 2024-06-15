@@ -19,6 +19,8 @@ import CardBox from "@/Components/CardBox.vue";
 import PictureCollection from "../../../Components/PictureCollection.vue";
 import MySelector from "../../../Components/MySelector.vue";
 import moment from 'moment';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
   feature_images: {
@@ -36,7 +38,7 @@ const addForm = useForm({
 // const isAddModalActive = ref(false);
 const isLoading = ref(false);
 const featureUploadModal = ref(false);
-
+const $toast = useToast();
 // const confirmAdd = () => {
 //   isAddModalActive.value = true;
 //    addForm.reset();
@@ -68,9 +70,14 @@ const createFeatureImageFunc = () => {
     onSuccess: () => {
        closeFeatureUpload();
         addForm.reset();
-       toast.add({
-          message: usePage().props.toast.message
-       });
+        selectedFile.value = null;
+        $toast.success("save photo",{
+            message: "Create Feature Photo Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
     },
     onError: () => {
        addForm.reset(),

@@ -21,4 +21,4 @@ yarn-error.log
 /storage/debugbar
 /storage/framework/*
 public/build/manifest.json
-public/build//assets/*
+public/build/assets/*

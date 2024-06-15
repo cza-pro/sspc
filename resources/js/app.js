@@ -9,6 +9,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'SSPC';
 const pinia = createPinia();
@@ -22,6 +24,7 @@ createInertiaApp({
             .use(pinia)
             .use(ZiggyVue)
             .use(ElementPlus)
+            .use(ToastPlugin)
             .mount(el);
     },
     progress: {
