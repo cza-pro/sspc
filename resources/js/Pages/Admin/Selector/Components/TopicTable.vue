@@ -5,6 +5,8 @@ import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import InputError from '@/Components/InputError.vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
   topics: {
@@ -21,6 +23,7 @@ const addNewLabel = ref(false);
 const toRemoveItem = ref([]);
 const photoRemoveModal = ref(false);
 const tempTopics = ref([]); // Create a local copy of props.topics
+const $toast = useToast();
 
 const formData = reactive({
   checkedTopic: checkedTopic
@@ -43,9 +46,13 @@ const addTopic = () => {
     onSuccess: () => {
       closeTopicNewLbl();
       addForm.reset();
-      toast.add({
-        message: usePage().props.toast.message
-      });
+      $toast.success("create topic",{
+        message: "Create Topic Successfully!!",
+        type: "success",
+        position: "top-right",
+        duration: 1000 * 10,
+        dismissible: true
+    });
     },
     onError: () => {
     //   addForm.reset(),
@@ -65,9 +72,12 @@ function removeTopicsFunc() {
     } else {
         checkedTopic.value = [];
     }
-    toast.add({
-        message: "Add !",
-        duration: 3000
+     $toast.warning("remove topic",{
+        message: "Remove topic Successfully!!",
+        type: "warning",
+        position: "top-right",
+        duration: 1000 * 10,
+        dismissible: true
     });
     tempTopics.value = JSON.parse(JSON.stringify(props.topics));
     closeRemove();

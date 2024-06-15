@@ -5,6 +5,8 @@ import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import InputError from '@/Components/InputError.vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
   grades: {
@@ -20,6 +22,7 @@ const addNewLabel = ref(false);
 const toRemoveItem = ref([]);
 const photoRemoveModal = ref(false);
 const tempGrades = ref([]); // Create a local copy of props.grades
+const $toast = useToast();
 
 const formData = reactive({
   checkedGrade: checkedGrade
@@ -42,9 +45,13 @@ const addGrade = () => {
     onSuccess: () => {
        closeGradeNewLbl();
        addForm.reset(),
-       toast.add({
-          message: usePage().props.toast.message
-       });
+       $toast.success("create grade",{
+            message: "Create Grade Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
     },
     onError: () => {
     //    addForm.reset(),
@@ -64,9 +71,12 @@ function removeGradesFunc() {
     } else {
         checkedGrade.value = [];
     }
-    toast.add({
-        message: "Add !",
-        duration: 3000
+    $toast.warning("remove grade",{
+        message: "Remove grade Successfully!!",
+        type: "warning",
+        position: "top-right",
+        duration: 1000 * 10,
+        dismissible: true
     });
     tempGrades.value = JSON.parse(JSON.stringify(props.grades));
     closeRemove();

@@ -5,6 +5,8 @@ import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import InputError from '@/Components/InputError.vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
   photo_types: {
@@ -21,6 +23,7 @@ const addNewPhotoTypeModal = ref(false);
 const toRemoveItem = ref([]);
 const photoTypeRemoveModal = ref(false);
 const tempPhotoType = ref([]); // Create a local copy of props.topics
+const $toast = useToast();
 
 const formData = reactive({
   checkedPhotoType: checkedPhotoType
@@ -43,9 +46,13 @@ const addPhotoType = () => {
     onSuccess: () => {
       closePhotoTypeNewLbl();
         addForm.reset(),
-      toast.add({
-        message: usePage().props.toast.message
-      });
+        $toast.success("create Photo Type",{
+            message: "Create Photo Type Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
     },
     onError: () => {
     //   addForm.reset(),
@@ -57,7 +64,7 @@ const addPhotoType = () => {
   })
 }
 
-function removeTopicsFunc() {
+function removeActionPhotoTypeFunc() {
     formData.checkedPhotoType = toRemoveItem
     router.post('/admin/photo-type/close', formData)
     if (checkedPhotoType instanceof Set) {
@@ -65,9 +72,12 @@ function removeTopicsFunc() {
     } else {
         checkedPhotoType.value = [];
     }
-    toast.add({
-        message: "Add !",
-        duration: 3000
+     $toast.warning("remove photo type",{
+        message: "Remove photo type Successfully!!",
+        type: "warning",
+        position: "top-right",
+        duration: 1000 * 10,
+        dismissible: true
     });
     tempPhotoType.value = JSON.parse(JSON.stringify(props.photo_types));
     closeRemove();
@@ -141,7 +151,7 @@ const photoTypeToRemoveFunc = (val) => {
         </div>
       </div>
       <div class="confirm-div">
-        <p class="confirmRemove" @click="removeTopicsFunc">確認關閉</p>
+        <p class="confirmRemove" @click="removeActionPhotoTypeFunc">確認關閉</p>
       </div>
     </div>
   </div>

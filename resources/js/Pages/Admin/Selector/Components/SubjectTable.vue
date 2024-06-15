@@ -5,6 +5,8 @@ import { mdiShape } from '@mdi/js';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import InputError from '@/Components/InputError.vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const props = defineProps({
   subjects: {
@@ -20,6 +22,7 @@ const addNewLabel = ref(false);
 const toRemoveItem = ref([]);
 const photoRemoveModal = ref(false);
 const tempSubjects = ref([]); // Create a local copy of props.subjects
+const $toast = useToast();
 
 const formData = reactive({
   checkedSubject: checkedSubject
@@ -43,22 +46,29 @@ const addSubject = () => {
     onSuccess: () => {
        closeSubjectNewLbl();
        addForm.reset();
-       toast.add({
-          message: usePage().props.toast.message
-       });
+        $toast.success("create subject",{
+            message: "Create Subject Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
     },
     onError: () => {
        addForm.reset(),
-       toast.add({
-          message: usePage().props.toast.message
-       });
+        $toast.info("error subject",{
+            message: "Add Subject Fail!!",
+            type: "info",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
        closeSubjectNewLbl()
     }
   })
 }
 
 function removeSubjectsFunc() {
-  // formData.checkedSubject = checkedSubject
   formData.checkedSubject = toRemoveItem
   router.post('/admin/subject/close', formData)
   if (checkedSubject instanceof Set) {
@@ -66,10 +76,13 @@ function removeSubjectsFunc() {
   } else {
       checkedSubject.value = [];
   }
-  toast.add({
-      message: "Add !",
-      duration: 3000
-  });
+    $toast.warning("remove subject",{
+        message: "Remove Subject Successfully!!",
+        type: "warning",
+        position: "top-right",
+        duration: 1000 * 10,
+        dismissible: true
+    });
   tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));
   closeRemove();
 }
