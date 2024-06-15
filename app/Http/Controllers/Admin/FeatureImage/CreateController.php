@@ -21,8 +21,8 @@ class CreateController extends Controller
                 'photo_size' => getimagesize($request->file('feature_image'))[0] . 'x'. getimagesize($request->file('feature_image'))[1]
             ]);
 
-            $category_image_path = ImageService::singleUpload($request->file('feature_image'), 'feature-image/'.Str::slug($request->name), 'public');
-            $feature_image->update(['photo_url' => $category_image_path]);
+            $feature_image_path = ImageService::singleUpload($request->file('feature_image'), 'feature-image'.Str::slug($request->name), 'public');
+            $feature_image->update(['photo_url' => $feature_image_path]);
         }
 
 
