@@ -82,6 +82,16 @@ const createFeatureImageFunc = () => {
   })
 }
 
+const selectedFile = ref(null)
+
+const onFileChange = (event) => {
+  // Update selectedFile with the chosen file
+  selectedFile.value = event.target.files[0];
+  // Do whatever you want with the file here
+  // For example, you can assign it to photo_url as you did before
+  addForm.feature_image = selectedFile.value;
+}
+
 
 </script>
 
@@ -153,13 +163,24 @@ const createFeatureImageFunc = () => {
     <div v-if="featureUploadModal" class="featureModal">
       <div class="modal-confirm-content">
         <span class="confirmation-close" @click="closeFeatureUpload">&times;</span>
-        <div class="file-div">
+        <!-- <div class="file-div">
           <p class="selectFile">選擇檔案
             <input type="file" @input="addForm.feature_image = $event.target.files[0]" />
 
             <InputError :message="addForm.errors.feature_image" class="mt-2" />
           </p>
+        </div> -->
+
+        <div class="file-div">
+          <label for="file-upload" class="custom-file-upload selectFile">
+            <span v-if="selectedFile">{{ selectedFile.name }}</span>
+            <span v-else>選擇檔案</span>
+          </label>
+          <input id="file-upload" type="file" style="display: none;" @change="onFileChange">
         </div>
+        <InputError :message="addForm.errors.feature_image" class="mt-2" />
+
+
         <p class="f1name">檔案名稱：</p>
         <div class="file-div">
           <button class="select1File" @click="createFeatureImageFunc">確認上傳 </button>
