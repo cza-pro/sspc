@@ -56,6 +56,8 @@ const photoUploadModal = ref(false);
 const addNewLabel = ref(false);
 const photoRemoveModal = ref(false);
 const featureUploadModal = ref(false);
+const photoImportModal = ref(false);
+
 const closeEdit = () => {
   photoEditModal.value = false;
 };
@@ -68,6 +70,10 @@ const closeRemove = () => {
 
 const closeUpload = () => {
   photoUploadModal.value = false;
+};
+
+const closeImport = () => {
+  photoImportModal.value = false;
 };
 const closeNewLbl = () => {
   addNewLabel.value = false;
@@ -112,7 +118,8 @@ const photoAddForm = useForm({
     subject_id: '',
     grade_id: '',
     topic_id: '',
-    photo_type_id: ''
+    photo_type_id: '',
+    import_file: ''
 });
 
 
@@ -177,6 +184,7 @@ const photoDeleteId = (photo) => {
 
 const tdatest = ref('')
 const selectedFile = ref(null)
+const importFile = ref(null)
 
 
 const photoEdit = (photo) => {
@@ -275,6 +283,34 @@ const onFileChange = (event) => {
   photoAddForm.photo_url = selectedFile.value;
 }
 
+const onImportFileChange = (event) => {
+  importFile.value = event.target.files[0];
+  photoAddForm.import_file = importFile.value;
+}
+
+const createImportFunc= () => {
+  photoAddForm.post(route('admin.photo.import'), {
+    preserveState: true,
+    onSuccess: () => {
+       closeImport();
+        photoAddForm.reset(),
+        importFile.value = null;
+        $toast.success("save import",{
+            message: "Import Data Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
+    },
+    onError: () => {
+       toast.add({
+          message: "erros please try again"
+       });
+    }
+  })
+}
+
 </script>
 
 <template>
@@ -288,6 +324,13 @@ const onFileChange = (event) => {
     <div class="right-content">
       <div v-if="currentActive == 'pictureManage'">
         <div class="btn-div">
+          <div class="btn-css" @click="photoImportModal = true">
+            <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
+            <p class="upload-txt">Import</p>
+          </div>
+
+        <!-- </div>
+        <div class="btn-div"> -->
           <div class="btn-css" @click="photoUploadModal = true">
             <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
             <p class="upload-txt">上傳圖片</p>
@@ -599,6 +642,29 @@ const onFileChange = (event) => {
     </div>
 
     <!-- end photo upload modal -->
+
+    <!-- photo import modal -->
+    <div v-if="photoImportModal" class="editModal">
+      <div class="modal-confirm-content">
+        <span class="confirmation-close" @click="closeImport">&times;</span>
+        <p class="fname">Photo Data Upload</p>
+        <div class="file-div">
+
+          <label for="file-upload" class="custom-file-upload selectFile">
+            <span v-if="importFile">{{ importFile.name }}</span>
+            <span v-else>選擇檔案</span>
+          </label>
+          <input id="file-upload" type="file" style="display: none;" @change="onImportFileChange">
+        </div>
+        <InputError :message="photoAddForm.errors.import_file" class="mt-2" />
+
+        <button @click="createImportFunc" class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
+            Confirm
+        </button>
+
+      </div>
+    </div>
+    <!-- end photo import modal -->
 
 
     <!-- photo remove modal -->
