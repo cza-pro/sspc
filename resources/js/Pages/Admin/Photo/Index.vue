@@ -8,6 +8,8 @@ import SideBar from "../Menu/SideBar.vue";
 import moment from 'moment';
 import toast from '@/Stores/toast';
 import InputError from '@/Components/InputError.vue';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 
 const props = defineProps({
@@ -54,6 +56,8 @@ const photoUploadModal = ref(false);
 const addNewLabel = ref(false);
 const photoRemoveModal = ref(false);
 const featureUploadModal = ref(false);
+const photoImportModal = ref(false);
+
 const closeEdit = () => {
   photoEditModal.value = false;
 };
@@ -66,6 +70,10 @@ const closeRemove = () => {
 
 const closeUpload = () => {
   photoUploadModal.value = false;
+};
+
+const closeImport = () => {
+  photoImportModal.value = false;
 };
 const closeNewLbl = () => {
   addNewLabel.value = false;
@@ -92,6 +100,7 @@ const grade = ref('')
 const knowledgeTopic = ref('')
 const photoType = ref('')
 const currentActive = ref('pictureManage')
+const $toast = useToast();
 
 
 const menuManage = (val) => {
@@ -109,7 +118,8 @@ const photoAddForm = useForm({
     subject_id: '',
     grade_id: '',
     topic_id: '',
-    photo_type_id: ''
+    photo_type_id: '',
+    import_file: ''
 });
 
 
@@ -120,9 +130,14 @@ const createPhoto = () => {
     onSuccess: () => {
        closeUpload();
         photoAddForm.reset(),
-       toast.add({
-          message: usePage().props.toast.message
-       });
+        selectedFile.value = null;
+        $toast.success("save photo",{
+            message: "Create Photo Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
     },
     onError: () => {
        toast.add({
@@ -148,9 +163,13 @@ const photoDeleteId = (photo) => {
     }),
     {
       onSuccess: () => {
-          toast.add({
-            message: "Delete Photo!",
-        })
+        $toast.warning("delete photo",{
+            message: "Delete Photo Successfully!!",
+            type: "warning",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
         photoDeleteModal.value = false;
       },
       onError: () => {
@@ -165,6 +184,7 @@ const photoDeleteId = (photo) => {
 
 const tdatest = ref('')
 const selectedFile = ref(null)
+const importFile = ref(null)
 
 
 const photoEdit = (photo) => {
@@ -173,6 +193,7 @@ const photoEdit = (photo) => {
   photoAddForm.subject_id = photo.subject_id;
   photoAddForm.grade_id = photo.grade_id;
   photoAddForm.topic_id = photo.topic_id;
+  photoAddForm.photo_type_id = photo.photo_type_id;
   photoAddForm.upload_photo_url = photo.upload_photo_url;
   photoAddForm.photo_format = photo.photo_format;
   photoAddForm.photo_size = photo.photo_size;
@@ -195,15 +216,18 @@ const photoEdit = (photo) => {
 
 
 const updatePhoto = () => {
-    console.log(photoAddForm.id);
   photoAddForm.post(route('admin.photo.update', {
     photo: photoAddForm.id
   }), {
     preserveScroll: true,
     onSuccess: () => {
-      toast.add({
-        message: 'Photo updated !'
-      })
+        $toast.success("update photo",{
+            message: "Update Photo Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
       photoAddForm.reset();
       photoEditModal.value = false;
     },
@@ -230,15 +254,18 @@ const photoRemove = (photo) => {
 };
 
 const removePhotoFunc = () => {
-    console.log(photoAddForm.id);
    photoAddForm.post(route('admin.photo.remove', {
     photo: photoAddForm.id
   }),
     {
       onSuccess: () => {
-          toast.add({
-            message: "Remove Photo!",
-        })
+        $toast.info("remove photo",{
+            message: "Remove Photo Successfully!!",
+            type: "info",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
         photoRemoveModal.value = false;
       },
       onError: () => {
@@ -252,11 +279,36 @@ const removePhotoFunc = () => {
 };
 
 const onFileChange = (event) => {
-  // Update selectedFile with the chosen file
   selectedFile.value = event.target.files[0];
-  // Do whatever you want with the file here
-  // For example, you can assign it to photo_url as you did before
   photoAddForm.photo_url = selectedFile.value;
+}
+
+const onImportFileChange = (event) => {
+  importFile.value = event.target.files[0];
+  photoAddForm.import_file = importFile.value;
+}
+
+const createImportFunc= () => {
+  photoAddForm.post(route('admin.photo.import'), {
+    preserveState: true,
+    onSuccess: () => {
+       closeImport();
+        photoAddForm.reset(),
+        importFile.value = null;
+        $toast.success("save import",{
+            message: "Import Data Successfully!!",
+            type: "success",
+            position: "top-right",
+            duration: 1000 * 10,
+            dismissible: true
+        });
+    },
+    onError: () => {
+       toast.add({
+          message: "erros please try again"
+       });
+    }
+  })
 }
 
 </script>
@@ -272,6 +324,13 @@ const onFileChange = (event) => {
     <div class="right-content">
       <div v-if="currentActive == 'pictureManage'">
         <div class="btn-div">
+          <div class="btn-css" @click="photoImportModal = true">
+            <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
+            <p class="upload-txt">Import</p>
+          </div>
+
+        <!-- </div>
+        <div class="btn-div"> -->
           <div class="btn-css" @click="photoUploadModal = true">
             <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
             <p class="upload-txt">上傳圖片</p>
@@ -427,20 +486,20 @@ const onFileChange = (event) => {
             </option>
         </select>
 
-          <el-select
-            v-model="photoType"
-            placeholder="圖片類型"
-            size="large"
-            style="width: 240px"
-            class="elselectwrapper2"
-          >
-            <el-option
-              v-for="item in typeoptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+        <select v-model="photoAddForm.photo_type_id" class="elselectwrapper1" >
+            <option
+                v-for="photo_type in photo_typess"
+                :value="photo_type.id"
+                :key="photo_type.id"
+                class="capitalize"
+                :selected="
+                    photoAddForm.photo_type_id == photo_type.id
+                "
+            >
+            {{ photo_type.name }}
+            </option>
+        </select>
+
         </div>
 
         <button class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing"
@@ -583,6 +642,29 @@ const onFileChange = (event) => {
     </div>
 
     <!-- end photo upload modal -->
+
+    <!-- photo import modal -->
+    <div v-if="photoImportModal" class="editModal">
+      <div class="modal-confirm-content">
+        <span class="confirmation-close" @click="closeImport">&times;</span>
+        <p class="fname">Photo Data Upload</p>
+        <div class="file-div">
+
+          <label for="file-upload" class="custom-file-upload selectFile">
+            <span v-if="importFile">{{ importFile.name }}</span>
+            <span v-else>選擇檔案</span>
+          </label>
+          <input id="file-upload" type="file" style="display: none;" @change="onImportFileChange">
+        </div>
+        <InputError :message="photoAddForm.errors.import_file" class="mt-2" />
+
+        <button @click="createImportFunc" class="confirm-btn" :class="{ 'opacity-25': photoAddForm.processing }" :disabled="photoAddForm.processing">
+            Confirm
+        </button>
+
+      </div>
+    </div>
+    <!-- end photo import modal -->
 
 
     <!-- photo remove modal -->

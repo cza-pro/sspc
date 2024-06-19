@@ -10,7 +10,7 @@ class ImageService
     {
         $uniqid = uniqid();
         $path = $file->storeAs($path, $uniqid.'.'. $file->extension(), $file_system);
-        return 'storage/'.$path;
+        return $path;
 
     }
 
@@ -55,7 +55,7 @@ class ImageService
         $isStored = Storage::disk($disk)->put('/'.$user_dir.'/'.$uniqid.'.'.$image_type, $image_base64);
 
         if ($isStored) {
-            return 'storage/'.$disk.'/'.$user_dir.'/'. $uniqid.'.'.$image_type;
+            return $disk.'/'.$user_dir.'/'. $uniqid.'.'.$image_type;
         }
 
         return false;

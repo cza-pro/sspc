@@ -26,7 +26,7 @@ class CreateController extends Controller
                 'photo_size' => getimagesize($request->file('photo_url'))[0] . 'x'. getimagesize($request->file('photo_url'))[1]
             ]);
 
-            $photo_url = ImageService::singleUpload($request->file('photo_url'), 'photo/'.Str::slug($request->name), 'public');
+            $photo_url = ImageService::singleUpload($request->file('photo_url'), 'photo', 'public');
             $photo->update(['photo_url' => $photo_url]);
         }
 
