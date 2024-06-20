@@ -50,7 +50,7 @@ const addPhotoType = () => {
             message: "Create Photo Type Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 100 * 10,
             dismissible: true
         });
     },
@@ -76,7 +76,7 @@ function removeActionPhotoTypeFunc() {
         message: "Remove photo type Successfully!!",
         type: "warning",
         position: "top-right",
-        duration: 1000 * 10,
+        duration: 100 * 10,
         dismissible: true
     });
     tempPhotoType.value = JSON.parse(JSON.stringify(props.photo_types));
@@ -130,7 +130,7 @@ const photoTypeToRemoveFunc = (val) => {
       <span class="confirmation-close" @click="closePhotoTypeNewLbl">&times;</span>
       <p class="grade-text">新增標籤：圖片類型選擇</p>
       <div class="file-div">
-        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="Photo Type">
+        <input type="text" v-model="addForm.name" id="newGrade" name="newGrade" class="gradecss" placeholder="輸入照片類型名稱">
       </div>
         <InputError :message="addForm.errors.name"/>
       <div class="btn-btn">
