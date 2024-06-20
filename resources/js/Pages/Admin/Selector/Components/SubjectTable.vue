@@ -50,7 +50,7 @@ const addSubject = () => {
             message: "Create Subject Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 100 * 10,
             dismissible: true
         });
     },
@@ -60,7 +60,7 @@ const addSubject = () => {
             message: "Add Subject Fail!!",
             type: "info",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 100 * 10,
             dismissible: true
         });
        closeSubjectNewLbl()
@@ -150,7 +150,7 @@ const lblToRemoveFunc = (val) => {
       <div class="itemremove-block">
         <div class="filter1-left">
           <div class="subject1-btns">
-            {{toRemoveItem}}
+            <!-- {{toRemoveItem}} -->
             <p :class="getButtonClass(subject)" class="each1-btn" @click="lblToRemoveFunc(subject)" v-for="subject in props.subjects" :key="subject.id">{{subject.name}}</p>
           </div>
         </div>

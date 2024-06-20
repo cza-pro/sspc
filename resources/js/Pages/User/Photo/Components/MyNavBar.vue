@@ -115,7 +115,7 @@ watch([searchName], debounce(function([searchNameValue]) {
       preserveState: true,
       replace: true,
     })
-  }, 2000));
+  }, 1000));
 
 </script>
 
