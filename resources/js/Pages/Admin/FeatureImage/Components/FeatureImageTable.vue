@@ -76,7 +76,7 @@ const removeFeatureImageFunc = (feature_image) => {
             message: "Remove Photo Successfully!!",
             type: "info",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 1000,
             dismissible: true
         });
         closeRemove();
@@ -103,7 +103,7 @@ const deleteFeatureImageFunc = (feature_image) => {
             message: "Delete Photo Successfully!!",
             type: "warning",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 1000,
             dismissible: true
         });
         closeDelete();

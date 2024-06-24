@@ -80,7 +80,7 @@ const createFeatureImageFunc = () => {
             message: "Create Feature Photo Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 1000,
             dismissible: true
         });
     },

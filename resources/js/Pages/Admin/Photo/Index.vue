@@ -135,7 +135,7 @@ const createPhoto = () => {
             message: "Create Photo Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 500,
             dismissible: true
         });
     },
@@ -167,7 +167,7 @@ const photoDeleteId = (photo) => {
             message: "Delete Photo Successfully!!",
             type: "warning",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 500,
             dismissible: true
         });
         photoDeleteModal.value = false;
@@ -225,7 +225,7 @@ const updatePhoto = () => {
             message: "Update Photo Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 500,
             dismissible: true
         });
       photoAddForm.reset();
@@ -263,7 +263,7 @@ const removePhotoFunc = () => {
             message: "Remove Photo Successfully!!",
             type: "info",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 500,
             dismissible: true
         });
         photoRemoveModal.value = false;
@@ -299,7 +299,7 @@ const createImportFunc= () => {
             message: "Import Data Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 1000 * 10,
+            duration: 500,
             dismissible: true
         });
     },

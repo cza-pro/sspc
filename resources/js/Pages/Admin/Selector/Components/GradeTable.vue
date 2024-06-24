@@ -49,7 +49,7 @@ const addGrade = () => {
             message: "Create Grade Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 100 * 10,
+            duration: 500,
             dismissible: true
         });
     },
@@ -75,7 +75,7 @@ function removeGradesFunc() {
         message: "Remove grade Successfully!!",
         type: "warning",
         position: "top-right",
-        duration: 100 * 10,
+        duration: 500,
         dismissible: true
     });
     tempGrades.value = JSON.parse(JSON.stringify(props.grades));
