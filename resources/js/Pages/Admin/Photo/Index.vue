@@ -331,7 +331,7 @@ const createImportFunc= () => {
 
         <!-- </div>
         <div class="btn-div"> -->
-          <div class="btn-css" @click="photoUploadModal = true">
+          <div class="btn1-css" @click="photoUploadModal = true">
             <img src="/images/admin/img-icon.png" alt="upload" class="upload-img">
             <p class="upload-txt">上傳圖片</p>
           </div>
@@ -730,7 +730,7 @@ const createImportFunc= () => {
       .btn-div {
         display: flex;
         justify-content: end;
-        .btn-css {
+        .btn-css, .btn1-css {
           display: flex;
           align-items: center;
           padding: 10px 1rem;
@@ -746,6 +746,9 @@ const createImportFunc= () => {
             font-size: 16px;
             color: #FFF;
           }
+        }
+        .btn1-css {
+          margin-left: 1rem;
         }
       }
       .each-block {
