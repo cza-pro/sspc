@@ -26,8 +26,10 @@ const props = defineProps({
   feature_images: {
     type: Object,
     default: {}
-  }
-
+  },
+  menuManage: {
+    type: String,
+  },
 })
 
 const addForm = useForm({
@@ -59,6 +61,9 @@ const closeFeatureUpload = () => {
   featureUploadModal.value = false;
 };
 
+const menuManage = (val) => {
+  currentActive.value = val
+}
 
 const createFeatureImageFunc = () => {
   addForm.post(route('admin.feature_image.create'), {
@@ -150,7 +155,7 @@ const onFileChange = (event) => {
 
 <div class="photo-content">
     <div class="left-content">
-      <PictureCollection @menu-manage="menuManage" />
+      <PictureCollection @menu-manage="menuManage" currentActive="featureImage" />
     </div>
     <div class="right-content">
 
