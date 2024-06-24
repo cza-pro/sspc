@@ -57,7 +57,7 @@
       <div class="right-btn">
         <div class="btn-block" @click="downloadFunc">
           <img src="/images/download-btn.png" alt="download" class="dl-css" />
-          <p class="download-btn">下載({{1}})</p>
+          <p class="download-btn">下載({{count}})</p>
           <img src="/images/download-btn.png" alt="download" class="dl-css" style="visibility: hidden; " />
         </div>
       </div>
@@ -145,6 +145,7 @@ const selectedDL = ref(false);
 const showConfirmation = ref(false);
 const selectedItems = ref([])
 const total = ref(40);
+const count = ref(0);
 
 const closeModal = () => {
   showModal.value = false;
@@ -163,17 +164,19 @@ const closeSelected = () => {
 };
 
 const checkFunc = (item) => {
-  const index = props.photos.findIndex(result => result.id === item.id);
+  const index = tempResult.value.findIndex(result => result.id === item.id);
   if (index !== -1) {
-    console.log("good luck CZA ", props.photos[index].id);
-    console.log("good luck TDA ", item.id);
-    console.log("good luck ", index);
-
     // Toggle the checkCondition property
-    props.photos[index].checkCondition = !props.photos[index].checkCondition;
+    tempResult.value[index].checkCondition = !tempResult.value[index].checkCondition;
+    if(tempResult.value[index].checkCondition == true) {
+      count.value++;
+    } else {
+      count.value--;
+    }
   } else {
     console.log("Item not found in the array");
   }
+  console.log('Checked Item ', count.value)
 };
 
 const downloadNormalVersion = () => {
