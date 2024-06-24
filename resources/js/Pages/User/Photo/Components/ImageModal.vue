@@ -122,6 +122,7 @@ const props = defineProps({
 });
 
 const currentPage = ref(1);
+const allResult = ref(0);
 const resultsPerPage = ref(4);
 const tempResult = ref(0);
 const totalItems = ref(5); // Example total item count
@@ -323,7 +324,8 @@ const paginationFunc = () => {
   const endIndex = startIndex + resultsPerPage.value;
 
   // Slice the photos array to get the data for the current page
-  tempResult.value = props.photos.slice(startIndex, endIndex);
+  let temp = allResult.value.slice(startIndex, endIndex);
+  tempResult.value = temp;
 }
 // watch(() => resultsPerPage.value, (newValue) => {
 //   handleSizeChange(newValue);
@@ -344,7 +346,12 @@ watch([() => resultsPerPage.value], ([newResultsPerPage], [oldResultsPerPage]) =
 watch([() => props.photos], ([newPhotos], [oldPhotos]) => {
     // Log the changes in props.photos
     console.log('Watch:', newPhotos);
-    tempResult.value = [...newPhotos]
+    if((props.searchbar && props.searchbar === true) || (props.selectorBool && props.selectorBool === true)) {
+      allResult.value = [...newPhotos]
+      paginationFunc();
+    } else {
+      tempResult.value = [...newPhotos]
+    }
 });
 
 
