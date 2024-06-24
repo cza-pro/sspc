@@ -50,7 +50,7 @@ const addPhotoType = () => {
             message: "Create Photo Type Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 100 * 10,
+            duration: 500,
             dismissible: true
         });
     },
@@ -76,7 +76,7 @@ function removeActionPhotoTypeFunc() {
         message: "Remove photo type Successfully!!",
         type: "warning",
         position: "top-right",
-        duration: 100 * 10,
+        duration: 500,
         dismissible: true
     });
     tempPhotoType.value = JSON.parse(JSON.stringify(props.photo_types));

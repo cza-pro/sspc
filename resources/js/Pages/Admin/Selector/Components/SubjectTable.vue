@@ -50,7 +50,7 @@ const addSubject = () => {
             message: "Create Subject Successfully!!",
             type: "success",
             position: "top-right",
-            duration: 100 * 10,
+            duration: 500,
             dismissible: true
         });
     },
@@ -60,7 +60,7 @@ const addSubject = () => {
             message: "Add Subject Fail!!",
             type: "info",
             position: "top-right",
-            duration: 100 * 10,
+            duration: 500,
             dismissible: true
         });
        closeSubjectNewLbl()
@@ -80,7 +80,7 @@ function removeSubjectsFunc() {
         message: "Remove Subject Successfully!!",
         type: "warning",
         position: "top-right",
-        duration: 1000 * 10,
+        duration: 500,
         dismissible: true
     });
   tempSubjects.value = JSON.parse(JSON.stringify(props.subjects));

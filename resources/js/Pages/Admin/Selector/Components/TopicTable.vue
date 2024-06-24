@@ -50,7 +50,7 @@ const addTopic = () => {
         message: "Create Topic Successfully!!",
         type: "success",
         position: "top-right",
-        duration: 100 * 10,
+        duration: 500,
         dismissible: true
     });
     },
@@ -76,7 +76,7 @@ function removeTopicsFunc() {
         message: "Remove topic Successfully!!",
         type: "warning",
         position: "top-right",
-        duration: 100 * 10,
+        duration: 500,
         dismissible: true
     });
     tempTopics.value = JSON.parse(JSON.stringify(props.topics));
