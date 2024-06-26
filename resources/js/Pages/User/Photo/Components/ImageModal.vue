@@ -1,110 +1,108 @@
 <template>
-  <!-- <div > -->
-    <div class="photo-block">
-      <div v-for="photo in tempResult" :key="photo" :class="((searchbar && searchbar === true) || (selectorBool && selectorBool === true))?'result-photo':'each-photo'">
-        <!-- Thumbnail Image -->
-        <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" class="each-image">
-          <div class="checked-css">
-            <img v-if="photo.checkCondition" src="/images/checked.png" alt="checked" class="" @click="checkFunc(photo)" />
-            <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
-          </div>
-          <div class="photo-block1">
-            <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
-            <div class="photo-data">
-              <p class="photo-title">{{photo.title}}</p>
-              <p class="photo-content">{{photo.content}}</p>
-            </div>
-          </div>
+  <div class="photo-block">
+    <div v-for="photo in tempResult" :key="photo" :class="((searchbar && searchbar === true) || (selectorBool && selectorBool === true))?'result-photo':'each-photo'">
+      <!-- Thumbnail Image -->
+      <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" class="each-image">
+        <div class="checked-css">
+          <img v-if="photo.checkCondition" src="/images/checked.png" alt="checked" class="" @click="checkFunc(photo)" />
+          <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
         </div>
-        <div v-else>
-          <!-- {{photo.subject.name}}
-          {{photo.grade.name}}
-          {{photo.photo_type.name}} -->
+        <div class="photo-block1">
           <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
+          <div class="photo-data">
+            <p class="photo-title">{{photo.title}}</p>
+            <p class="photo-content">{{photo.content}}</p>
+          </div>
         </div>
+      </div>
+      <div v-else>
+        <!-- {{photo.subject.name}}
+        {{photo.grade.name}}
+        {{photo.photo_type.name}} -->
+        <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
+      </div>
 
-        <!-- Modal -->
-        <!-- @click.self="showModal = false" -->
-        <div v-if="showModal" class="modal">
-          <div class="modal-content">
-            <!-- @click="showModal = false" -->
-            <span class="close" v-if="!showConfirmation" @click="closeModal()">&times;</span>
-            <div class="modal-container">
-              <img :src="fullImageSrc" class="modal-image" />
-              <!-- Confirmation Popup -->
-              <div v-if="showConfirmation" class="confirm-modal">
-                <div class="modal-confirm-content confirmation-content">
-                  <span class="close confirmation-close" @click="closeConfirmation">&times;</span>
-                  <p class="confirm-text">是否一併下載灰階版照片？</p>
-                  <button @click="downloadNormalVersion" class="cancel-button">不需要</button>
-                  <button @click="downloadBothVersions" class="confirm-button">是</button>
-                </div>
+      <!-- Modal -->
+      <!-- @click.self="showModal = false" -->
+      <div v-if="showModal" class="modal">
+        <div class="modal-content">
+          <!-- @click="showModal = false" -->
+          <span class="close" v-if="!showConfirmation" @click="closeModal()">&times;</span>
+          <div class="modal-container">
+            <img :src="fullImageSrc" class="modal-image" />
+            <!-- Confirmation Popup -->
+            <div v-if="showConfirmation" class="confirm-modal">
+              <div class="modal-confirm-content confirmation-content">
+                <span class="close confirmation-close" @click="closeConfirmation">&times;</span>
+                <p class="confirm-text">是否一併下載灰階版照片？</p>
+                <button @click="downloadNormalVersion" class="cancel-button">不需要</button>
+                <button @click="downloadBothVersions" class="confirm-button">是</button>
               </div>
             </div>
-            
-            <div class="download-row" @click="confirmDownload">
-              <img src="/images/download.png" alt="download" class="download-img">
-              <p class="download-css">
-                下載
-              </p>
-            </div>
+          </div>
+          
+          <div class="download-row" @click="confirmDownload">
+            <img src="/images/download.png" alt="download" class="download-img">
+            <p class="download-css">
+              下載
+            </p>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" >
-      <div class="right-btn">
-        <div class="btn-block" @click="downloadFunc">
-          <img src="/images/download-btn.png" alt="download" class="dl-css" />
-          <p class="download-btn">下載({{count}})</p>
-          <img src="/images/download-btn.png" alt="download" class="dl-css" style="visibility: hidden; " />
-        </div>
-      </div>
-
-      <div>
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="resultsPerPage"
-          :page-sizes="[2, 4, 6, 8]"
-          :small="false"
-          :disabled="false"
-          :background="true"
-          layout="prev, slot, next"
-          :total="allResult.length"
-          prev-text="上一頁"
-          next-text="下一頁"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        >
-          <template v-slot>
-            <div class="custom-sizes">
-              <span>每頁顯示</span>
-              <el-select v-model="resultsPerPage" placeholder="每頁顯示">
-                <el-option
-                  v-for="size in [2, 4, 6, 8]"
-                  :key="size"
-                  :label="`${size}`"
-                  :value="size"
-                />
-              </el-select>
-              <span>張</span>
-            </div>
-            <div class="custom-total">共 {{ allResult.length }} 頁</div>
-          </template>
-        </el-pagination>
-      </div>
-
-      <div v-if="selectedDL" class="modal">
-        <div class="modal-confirm-content confirmation-content">
-          <span class="close confirmation-close" @click="closeSelected">&times;</span>
-          <p class="confirm-text">是否一併下載灰階版照片？</p>
-          <button @click="dlSelectedOneVersion" class="cancel-button">不需要</button>
-          <button @click="dlSelectedBothVersions" class="confirm-button">是</button>
-        </div>
+  <div v-if="(searchbar && searchbar === true) || (selectorBool && selectorBool === true)" >
+    <div class="right-btn">
+      <div class="btn-block" @click="downloadFunc">
+        <img src="/images/download-btn.png" alt="download" class="dl-css" />
+        <p class="download-btn">下載({{count}})</p>
+        <img src="/images/download-btn.png" alt="download" class="dl-css" style="visibility: hidden; " />
       </div>
     </div>
-  <!-- </div> -->
+
+    <div>
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="resultsPerPage"
+        :page-sizes="[2, 4, 6, 8]"
+        :small="false"
+        :disabled="false"
+        :background="true"
+        layout="prev, slot, next"
+        :total="allResult.length"
+        prev-text="上一頁"
+        next-text="下一頁"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      >
+        <template v-slot>
+          <div class="custom-sizes">
+            <span>每頁顯示</span>
+            <el-select v-model="resultsPerPage" placeholder="每頁顯示">
+              <el-option
+                v-for="size in [2, 4, 6, 8]"
+                :key="size"
+                :label="`${size}`"
+                :value="size"
+              />
+            </el-select>
+            <span>張</span>
+          </div>
+          <div class="custom-total">共 {{ allResult.length }} 頁</div>
+        </template>
+      </el-pagination>
+    </div>
+
+    <div v-if="selectedDL" class="modal">
+      <div class="modal-confirm-content confirmation-content">
+        <span class="close confirmation-close" @click="closeSelected">&times;</span>
+        <p class="confirm-text">是否一併下載灰階版照片？</p>
+        <button @click="dlSelectedOneVersion" class="cancel-button">不需要</button>
+        <button @click="dlSelectedBothVersions" class="confirm-button">是</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -125,6 +123,11 @@ const currentPage = ref(1);
 const allResult = ref(0);
 const resultsPerPage = ref(4);
 const tempResult = ref(0);
+const showModal = ref(false);
+const selectedDL = ref(false);
+const showConfirmation = ref(false);
+const selectedItems = ref([])
+const count = ref(0);
 
 const totalPages = computed(() => {
   return Math.ceil(allResult.value / resultsPerPage.value);
@@ -140,12 +143,6 @@ const handleCurrentChange = (newPage) => {
   paginationFunc();
 };
 
-const showModal = ref(false);
-const selectedDL = ref(false);
-const showConfirmation = ref(false);
-const selectedItems = ref([])
-const count = ref(0);
-
 const closeModal = () => {
   showModal.value = false;
   showConfirmation.value = false;
@@ -158,6 +155,7 @@ const confirmDownload = () => {
 const closeConfirmation = () => {
   showConfirmation.value = false;
 };
+
 const closeSelected = () => {
   selectedDL.value = false;
 };
@@ -197,12 +195,14 @@ const downloadFunc = () => {
 
   selectedDL.value = true
 };
+
 const dlSelectedOneVersion = () => {
   selectedItems.value.forEach((url, index) => {
     const filename = `image_${index}.png`;
     dlSelectedImage(url, filename);
   });
 };
+
 const dlSelectedImage = (url, filename) => {
   const link = document.createElement('a');
   link.href = url;
@@ -223,6 +223,7 @@ const dlSelectedBothVersions = async () => {
     dlBothVersions(grayscaleUrl, `grayscale_${filename}`);
   }
 };
+
 // Function to download an image
 const dlBothVersions = (url, filename) => {
   const link = document.createElement('a');
@@ -232,6 +233,7 @@ const dlBothVersions = (url, filename) => {
   link.click();
   document.body.removeChild(link);
 };
+
 // Function to convert an image to grayscale
 const convertToAllGrayscale = (url) => {
   return new Promise((resolve, reject) => {
@@ -325,10 +327,10 @@ const paginationFunc = () => {
   let temp = allResult.value.slice(startIndex, endIndex);
   tempResult.value = temp;
 }
+
 // watch(() => resultsPerPage.value, (newValue) => {
 //   handleSizeChange(newValue);
 // });
-
 
 // watch([() => resultsPerPage.value, () => props.photos], ([newResultsPerPage, newPhotos], [oldResultsPerPage, oldPhotos]) => {
 //     handleSizeChange(newResultsPerPage);
@@ -338,8 +340,8 @@ const paginationFunc = () => {
 
 
 watch([() => resultsPerPage.value], ([newResultsPerPage], [oldResultsPerPage]) => {
-    // Handle the changes in resultsPerPage
-    handleSizeChange(newResultsPerPage);
+  // Handle the changes in resultsPerPage
+  handleSizeChange(newResultsPerPage);
 });
 watch([() => props.photos], ([newPhotos], [oldPhotos]) => {
     // Log the changes in props.photos
@@ -351,7 +353,6 @@ watch([() => props.photos], ([newPhotos], [oldPhotos]) => {
       tempResult.value = [...newPhotos]
     }
 });
-
 
 onMounted(() => {
   if(!props.searchbar) {

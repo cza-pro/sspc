@@ -6,66 +6,8 @@ import debounce from 'lodash/debounce'
 // Defining primitive values with ref
 const loginState = ref(false);  // Similar to data { return { loginState: true } } in Vue 2
 const isDropdownVisible = ref(false);
-
 const results = ref([]);
-
-
-// Function to fetch results from the server
-const fetchResults = async (query) => {
-  // try {
-  //   const response = await axios.get('/api/search', {
-  //     params: { query }
-  //   });
-  //   results.value = response.data;
-  // } catch (error) {
-  //   console.error('Error fetching search results:', error);
-  // }
-};
-const photos = [
-  {
-    id: 1,
-    name: '1',
-    title: 'CZA',
-    content: 'Content for item 1',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 2,
-    name: '1',
-    title: 'TDA',
-    content: 'Content for item 2',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 3,
-    name: '1',
-    title: 'MMM',
-    content: 'Content for item 3',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 4,
-    name: '1',
-    title: 'MMLM',
-    content: 'Content for item 4',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  },
-  {
-    id: 5,
-    name: '1',
-    title: 'KT',
-    content: 'Content for item 5',
-    srcPath: '/images/photo1.png',
-    checkCondition: false
-  }
-];
-
 const searchName = ref('');
-
 
 // Define the emit function
 const emit = defineEmits(['update-search-query']);
@@ -74,16 +16,6 @@ const emit = defineEmits(['update-search-query']);
 const emitSearchQuery = () => {
   emit('update-search-query', searchName.value);
 };
-
-
-// // Watch the search query for changes
-// watch(searchName, (newQuery) => {
-//   if (newQuery) {
-//     fetchResults(newQuery);
-//   } else {
-//     results.value = [];
-//   }
-// });
 
 // Define methods
 function loginFunc() {
@@ -106,17 +38,15 @@ function logoutFunc() {
 //   dropdownFunc
 // };
 
-
 watch([searchName], debounce(function([searchNameValue]) {
-    router.get(route('photo.index'), {
-      searchName: searchNameValue
-    }, {
-      preserveScroll: true,
-      preserveState: true,
-      replace: true,
-    })
-  }, 1000));
-
+  router.get(route('photo.index'), {
+    searchName: searchNameValue
+  }, {
+    preserveScroll: true,
+    preserveState: true,
+    replace: true,
+  })
+}, 1000));
 </script>
 
 <template>
