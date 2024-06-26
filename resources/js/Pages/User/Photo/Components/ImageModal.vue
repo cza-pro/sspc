@@ -71,7 +71,7 @@
           :disabled="false"
           :background="true"
           layout="prev, slot, next"
-          :total="total"
+          :total="allResult.length"
           prev-text="上一頁"
           next-text="下一頁"
           @size-change="handleSizeChange"
@@ -90,7 +90,7 @@
               </el-select>
               <span>張</span>
             </div>
-            <div class="custom-total">共 {{ totalItems }} 頁</div>
+            <div class="custom-total">共 {{ allResult.length }} 頁</div>
           </template>
         </el-pagination>
       </div>
@@ -125,10 +125,9 @@ const currentPage = ref(1);
 const allResult = ref(0);
 const resultsPerPage = ref(4);
 const tempResult = ref(0);
-const totalItems = ref(5); // Example total item count
 
 const totalPages = computed(() => {
-  return Math.ceil(totalItems.value / resultsPerPage.value);
+  return Math.ceil(allResult.value / resultsPerPage.value);
 });
 
 const handleSizeChange = (newSize) => {
@@ -137,15 +136,14 @@ const handleSizeChange = (newSize) => {
 };
 
 const handleCurrentChange = (newPage) => {
-  console.log('Prev Next ', newPage)
   currentPage.value = newPage;
+  paginationFunc();
 };
 
 const showModal = ref(false);
 const selectedDL = ref(false);
 const showConfirmation = ref(false);
 const selectedItems = ref([])
-const total = ref(40);
 const count = ref(0);
 
 const closeModal = () => {
