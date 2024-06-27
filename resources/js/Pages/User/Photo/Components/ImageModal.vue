@@ -16,10 +16,7 @@
         </div>
       </div>
       <div v-else>
-        <!-- {{photo.subject.name}}
-        {{photo.grade.name}}
-        {{photo.photo_type.name}} -->
-        <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
+        <img :src="photo.photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
       </div>
 
       <!-- Modal -->
@@ -112,6 +109,10 @@ import { ref, watch, computed, onMounted } from 'vue';
 const props = defineProps({
   fullImageSrc: String,
   photos: {
+    type: Object,
+    default: {},
+  },
+  featureImgs: {
     type: Object,
     default: {},
   },
@@ -350,13 +351,14 @@ watch([() => props.photos], ([newPhotos], [oldPhotos]) => {
       allResult.value = [...newPhotos]
       paginationFunc();
     } else {
-      tempResult.value = [...newPhotos]
+      tempResult.value = [...props.featureImgs]
     }
 });
 
 onMounted(() => {
   if(!props.searchbar) {
-    tempResult.value = [...props.photos]
+    allResult.value = [...props.featureImgs]
+    tempResult.value = [...props.featureImgs]
   } else {
     paginationFunc();
   }

@@ -10,6 +10,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  featureImgs: {
+    type: Object,
+    default: {}
+  },
   searchName: {
     type: String,
     required: true
@@ -37,27 +41,14 @@ watch(() => props.selectorBool, (newValue) => {
       <p class="right-title">
         搜尋結果
       </p>
-      <div v-if="props.selectorBool && props.selectorBool == true">
-        <!-- <div v-for="photo in props.photos" :key="photo" class="each-photo"> -->
-          <ImageModal
-            fullImageSrc="/images/photo1.png"
-            :searchbar="searchbar"
-            :photos="props.photos"
-            :selectorBool="props.selectorBool"
-          />
-        <!-- </div> -->
-      </div>
-      <div v-else>
-        <!-- <div v-for="photo in props.photos" :key="photo" class="result-photo"> -->
-          <!-- selector => {{selectorBool}}<br>
-          searchBar => {{searchbar}}<br>
-          hey -->
-          <ImageModal
-            fullImageSrc="/images/photo1.png"
-            :searchbar="searchbar"
-            :photos="props.photos"
-          />
-        <!-- </div> -->
+      <div>
+        <ImageModal
+          fullImageSrc="/images/photo1.png"
+          :searchbar="searchbar"
+          :photos="props.photos"
+          :featureImgs="props.featureImgs"
+          :selectorBool="props.selectorBool"
+        />
       </div>
     </div>
     <div v-else class="content-width">

@@ -8,6 +8,7 @@ use App\Models\Photo;
 use App\Models\Topic;
 use App\Models\Subject;
 use App\Models\PhotoType;
+use App\Models\FeatureImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,7 @@ class IndexController extends Controller
         $grades = Grade::where('available', 'on')->get();
         $topics = Topic::where('available', 'on')->get();
         $photo_types = PhotoType::where('available', 'on')->get();
+        $feature_images = FeatureImage::where('public', 'on')->get();
 
         $photos = PhotoResource::collection($data);
 
@@ -52,6 +54,7 @@ class IndexController extends Controller
             'grades' => $grades,
             'topics' => $topics,
             'photo_types' => $photo_types,
+            'feature_images' => $feature_images,
             'filters' => $request->only(['filterSubject','filterGrade', 'filterTopic', 'filterPhotoType', 'filterName']),
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register')
