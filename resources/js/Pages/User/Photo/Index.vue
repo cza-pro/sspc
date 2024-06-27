@@ -52,7 +52,11 @@ const props = defineProps({
   photo_types: {
     type: Object,
     default: {},
-  }
+  },
+  feature_images: {
+    type: Object,
+    default: {}
+  },
 });
 
 const statusRef = ref("");
@@ -98,6 +102,6 @@ const handleSearchQuery = async (query) => {
   <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
   <div class="home-content">
     <SideBar userType="userType" :subjects="subjects" :grades="grades" :topics="topics" :photo_types="photo_types" @selector-value="selectorFunc" />
-    <PhotoContent :photos="photos.data" :searchName="searchName" :selectorBool="selectorBool" />
+    <PhotoContent :photos="photos.data" :featureImgs="feature_images" :searchName="searchName" :selectorBool="selectorBool" />
   </div>
 </template>
