@@ -43,7 +43,6 @@ watch(() => props.selectorBool, (newValue) => {
       </p>
       <div>
         <ImageModal
-          fullImageSrc="/images/photo1.png"
           :searchbar="searchbar"
           :photos="props.photos"
           :featureImgs="props.featureImgs"
