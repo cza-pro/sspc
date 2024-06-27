@@ -22,7 +22,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "name" => ["required"]
+            "name" => ["required", "string", "max:20","alpha_dash"]
         ];
 
         return $rules;
@@ -32,7 +32,8 @@ class CreateRequest extends FormRequest
     {
         $messages =[];
 
-        $messages['name.required'] = 'Please Enter Grade Name';
+        $messages['name.required'] = '請輸入年級名稱!';
+        $messages['name.alpha_dash'] = '請輸入字元和數字!';
 
 
         return $messages;

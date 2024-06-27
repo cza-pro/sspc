@@ -22,12 +22,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "name" => ["required"],
+            "name" => ["required", "string", "max:20","alpha_dash"],
             "subject_id" => ["required"],
             "grade_id" => ["required"],
             "topic_id" => ["required"],
             "photo_type_id" => ["required"],
-            "photo_url" => ["required"]
+            "photo_url" => ["required", "mimes:jpg,jpeg,bmp,png"]
         ];
 
         return $rules;
@@ -37,12 +37,14 @@ class CreateRequest extends FormRequest
     {
         $messages =[];
 
-        $messages['name.required'] = 'Please enter Name';
-        $messages['subject_id.required'] = 'Please Select Subject';
-        $messages['grade_id.required'] = 'Please select Grade';
-        $messages['topic_id.required'] = 'Please select topic';
-        $messages['photo_type_id.required'] = 'Please select photo type';
-        $messages['photo_url.required'] = 'Please Select Photo';
+        $messages['name.required'] = '請輸入姓名!';
+        $messages['name.alpha_dash'] = '請輸入字元和數字';
+        $messages['subject_id.required'] = '請選擇主題';
+        $messages['grade_id.required'] = '請選擇年級';
+        $messages['topic_id.required'] = '請選擇主題';
+        $messages['photo_type_id.required'] = '請選擇照片類型';
+        $messages['photo_url.required'] = '請選擇照片';
+        $messages['photo_url.mimes'] = '請選擇 jpg , jpeg, png,bmp 類型';
 
 
         return $messages;

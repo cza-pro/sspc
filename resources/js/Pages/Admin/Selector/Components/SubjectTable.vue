@@ -63,7 +63,7 @@ const addSubject = () => {
             duration: 500,
             dismissible: true
         });
-       closeSubjectNewLbl()
+    //    closeSubjectNewLbl()
     }
   })
 }
