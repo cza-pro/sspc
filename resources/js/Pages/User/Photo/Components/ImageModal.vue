@@ -8,7 +8,7 @@
           <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
         </div>
         <div class="photo-block1">
-          <img :src="photo.upload_photo_url" @click="showModalFunc(photo)" alt="Filter" class="thumbnail" />
+          <img :src="photo.photo_url" @click="showModalFunc(photo)" alt="Filter" class="thumbnail" />
           <div class="photo-data">
             <p class="photo-title">{{photo.title}}</p>
             <p class="photo-content">{{photo.content}}</p>
@@ -182,35 +182,40 @@ const checkFunc = (item) => {
 };
 
 const downloadNormalVersion = (val) => {
-  downloadImage(val);
+  const filename = `${val.name}`;
+  downloadImage(val.photo_url, filename);
   closeModal();
 };
 
-const downloadBothVersions = (val) => {
-  downloadImage(val);
-  downloadGrayscaleImage(val);
+const downloadBothVersions = async (val) => {
+  const filename = `${val.name}`;
+  downloadImage(val.photo_url, filename);
+  
+  // Convert to grayscale and download
+  const grayscaleUrl = await convertToAllGrayscale(val);
+  downloadImage(grayscaleUrl, `grayscale_${filename}`);
   closeModal();
 };
 
 const downloadFunc = () => {
   // Filter the props.photos array to get items where checkCondition is true
-  selectedItems.value = props.photos
-    .filter(item => item.checkCondition === true)
-    .map(item => item.srcPath);
-
+  selectedItems.value = tempResult.value
+    .filter(item => item.checkCondition == true);
   selectedDL.value = true
 };
 
 const dlSelectedOneVersion = () => {
   selectedItems.value.forEach((url, index) => {
-    const filename = `image_${index}.png`;
-    dlSelectedImage(url, filename);
+    const filename = `${url.name}`;
+    downloadImage(url.photo_url, filename);
   });
+  closeSelected();
 };
 
-const dlSelectedImage = (url, filename) => {
+const downloadImage = (url, filename) => {
   const link = document.createElement('a');
   link.href = url;
+  // link.download = 'grayscale_' + url.split('/').pop();
   link.download = filename;
   document.body.appendChild(link);
   link.click();
@@ -220,36 +225,28 @@ const dlSelectedImage = (url, filename) => {
 // Function to download all images in normal and grayscale versions
 const dlSelectedBothVersions = async () => {
   for (const [index, url] of selectedItems.value.entries()) {
-    const filename = `image_${index}.png`;
+    const filename = `${url.name}`;
     // Download normal version
-    dlBothVersions(url, filename);
+    downloadImage(url.photo_url, filename);
     // Convert to grayscale and download
     const grayscaleUrl = await convertToAllGrayscale(url);
-    dlBothVersions(grayscaleUrl, `grayscale_${filename}`);
+    downloadImage(grayscaleUrl, `grayscale_${filename}`);
   }
+  closeSelected();
 };
 
-// Function to download an image
-const dlBothVersions = (url, filename) => {
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
 
 // Function to convert an image to grayscale
 const convertToAllGrayscale = (url) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous'; // Allow cross-origin images
-    img.src = url;
+    img.src = url.photo_url;
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
       canvas.width = img.width;
       canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
@@ -268,61 +265,6 @@ const convertToAllGrayscale = (url) => {
       reject(new Error('Failed to load image'));
     };
   });
-};
-
-// Function to download an image
-const downloadSelectedImage = (image, filename) => {
-  const link = document.createElement('a');
-  link.href = image;
-  link.download = image.split('/').pop();
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-const downloadImage = (url) => {
-  const link = document.createElement('a');
-  link.href = url.photo_url;
-  // link.download = url.photo_url.split('/').pop();
-  link.download = url.name;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-const downloadGrayscaleImage = (url) => {
-  const img = new Image();
-  img.crossOrigin = 'Anonymous';
-  img.src = url.photo_url
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-
-    // Apply grayscale filter
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imgData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-      data[i] = avg;
-      data[i + 1] = avg;
-      data[i + 2] = avg;
-    }
-    ctx.putImageData(imgData, 0, 0);
-
-    // Create a temporary link to download the grayscale image
-    canvas.toBlob((blob) => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      // link.download = 'grayscale_' + url.split('/').pop();
-      link.download = 'grayscale_' + url.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  };
 };
 
 const paginationFunc = () => {
