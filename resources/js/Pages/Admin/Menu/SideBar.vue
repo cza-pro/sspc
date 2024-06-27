@@ -82,25 +82,25 @@ const filterSearch = () => {
       <el-collapse v-model="activeNames">
         <el-collapse-item title="科目" name="1">
           <el-checkbox-group v-model="filterSubject.id" class="check-css" v-for="subject in subjects" :key="subject.id">
-            <el-checkbox :label="subject.name" :value="subject.id" :name="subject.id" class="custom-checkbox" />
+            <el-checkbox :label="subject.name" :value="subject.id" :name="String(subject.id)" class="custom-checkbox" />
           </el-checkbox-group>
         </el-collapse-item>
 
         <el-collapse-item title="年級" name="2">
           <el-checkbox-group v-model="filterGrade.id" class="check-css" v-for="grade in grades" :key="grade.id">
-            <el-checkbox :label="grade.name" :value="grade.id" :name="grade.id" class="custom-checkbox" />
+            <el-checkbox :label="grade.name" :value="grade.id" :name="String(grade.id)" class="custom-checkbox" />
           </el-checkbox-group>
         </el-collapse-item>
 
         <el-collapse-item title="知識主題" name="3">
           <el-checkbox-group v-model="filterTopic.id" class="check-css" v-for="topic in topics" :key="topic.id">
-            <el-checkbox :label="topic.name" :value="topic.id"  :name="topic.id" class="custom-checkbox" />
+            <el-checkbox :label="topic.name" :value="topic.id"  :name="String(topic.id)" class="custom-checkbox" />
           </el-checkbox-group>
         </el-collapse-item>
 
         <el-collapse-item title="圖片類型" name="4">
           <el-checkbox-group v-model="filterPhotoType.id" class="check-css" v-for="photo_type in photo_types" :key="photo_type.id">
-            <el-checkbox :label="photo_type.name" :value="photo_type.id" :name="photo_type.id" class="custom-checkbox" />
+            <el-checkbox :label="photo_type.name" :value="photo_type.id" :name="String(photo_type.id)" class="custom-checkbox" />
           </el-checkbox-group>
         </el-collapse-item>
       </el-collapse>

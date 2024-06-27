@@ -12,10 +12,9 @@ const searchName = ref('');
 // Define the emit function
 const emit = defineEmits(['update-search-query']);
 
-// Function to emit the search query to the parent
-const emitSearchQuery = () => {
-  emit('update-search-query', searchName.value);
-};
+// const emitSearchQuery = () => {
+//   emit('update-search-query', searchName.value);
+// };
 
 // Define methods
 function loginFunc() {
@@ -39,6 +38,7 @@ function logoutFunc() {
 // };
 
 watch([searchName], debounce(function([searchNameValue]) {
+  emit('update-search-query', searchNameValue);
   router.get(route('photo.index'), {
     searchName: searchNameValue
   }, {
@@ -53,9 +53,9 @@ watch([searchName], debounce(function([searchNameValue]) {
   <div class="p-4 sm:top-0 nav-bar">
     <div class="menu-logo">
       <p class="logo-text">南一國中社會圖輯網</p>
-      <input type="text" v-model="searchName" @input="emitSearchQuery" id="search-bar" name="searchword" class="search-box" placeholder="搜尋圖片名稱、知識主題">
+      <!-- @input="emitSearchQuery" -->
+      <input type="text" v-model="searchName" id="search-bar" name="searchword" class="search-box" placeholder="搜尋圖片名稱、知識主題">
     </div>
-
 
     <div class="dropdown">
       <div class="dropbtn menu-title">

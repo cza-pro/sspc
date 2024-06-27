@@ -61,8 +61,6 @@ const props = defineProps({
 
 const statusRef = ref("");
 const nameRef = ref("");
-const searchTemp = ref("");
-const initialSearchQuery = ref('');
 const searchName = ref('');
 const selectorBool = ref(false);
 
@@ -88,10 +86,7 @@ const selectorFunc = (value) => {
 const handleSearchQuery = async (query) => {
   if (query) {
     searchName.value = query
-    searchTemp.value = props.photos.data.filter(item => item.name.includes(query));
-    console.log('if query ', searchTemp.value)
   } else {
-    console.log('else empty ', props.photos.length)
     searchName.value = ''
   }
 }
@@ -99,7 +94,7 @@ const handleSearchQuery = async (query) => {
 
 <template>
   <Head title="Nani" />
-  <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" :initialQuery="initialSearchQuery" />
+  <MyNavBar v-if="canLogin" @update-search-query="handleSearchQuery" />
   <div class="home-content">
     <SideBar userType="userType" :subjects="subjects" :grades="grades" :topics="topics" :photo_types="photo_types" @selector-value="selectorFunc" />
     <PhotoContent :photos="photos.data" :featureImgs="feature_images" :searchName="searchName" :selectorBool="selectorBool" />
