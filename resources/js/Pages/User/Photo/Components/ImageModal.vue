@@ -8,7 +8,7 @@
           <img v-else src="/images/uncheck.png" alt="uncheck" class="" @click="checkFunc(photo)" />
         </div>
         <div class="photo-block1">
-          <img :src="photo.upload_photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
+          <img :src="photo.upload_photo_url" @click="showModalFunc(photo)" alt="Filter" class="thumbnail" />
           <div class="photo-data">
             <p class="photo-title">{{photo.title}}</p>
             <p class="photo-content">{{photo.content}}</p>
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div v-else>
-        <img :src="photo.photo_url" @click="showModal = true" alt="Filter" class="thumbnail" />
+        <img :src="photo.photo_url" @click="showModalFunc(photo)" alt="Filter" class="thumbnail" />
       </div>
 
       <!-- Modal -->
@@ -26,14 +26,14 @@
           <!-- @click="showModal = false" -->
           <span class="close" v-if="!showConfirmation" @click="closeModal()">&times;</span>
           <div class="modal-container">
-            <img :src="fullImageSrc" class="modal-image" />
+            <img :src="popupImg.photo_url" class="modal-image" />
             <!-- Confirmation Popup -->
             <div v-if="showConfirmation" class="confirm-modal">
               <div class="modal-confirm-content confirmation-content">
                 <span class="close confirmation-close" @click="closeConfirmation">&times;</span>
                 <p class="confirm-text">是否一併下載灰階版照片？</p>
-                <button @click="downloadNormalVersion" class="cancel-button">不需要</button>
-                <button @click="downloadBothVersions" class="confirm-button">是</button>
+                <button @click="downloadNormalVersion(popupImg)" class="cancel-button">不需要</button>
+                <button @click="downloadBothVersions(popupImg)" class="confirm-button">是</button>
               </div>
             </div>
           </div>
@@ -107,7 +107,6 @@ import { ref, watch, computed, onMounted } from 'vue';
 
 // Props for thumbnail and full-size image URLs
 const props = defineProps({
-  fullImageSrc: String,
   photos: {
     type: Object,
     default: {},
@@ -129,6 +128,7 @@ const selectedDL = ref(false);
 const showConfirmation = ref(false);
 const selectedItems = ref([])
 const count = ref(0);
+const popupImg = ref('');
 
 const totalPages = computed(() => {
   return Math.ceil(allResult.value / resultsPerPage.value);
@@ -147,6 +147,10 @@ const handleCurrentChange = (newPage) => {
 const closeModal = () => {
   showModal.value = false;
   showConfirmation.value = false;
+};
+const showModalFunc = (val) => {
+  showModal.value = true;
+  popupImg.value = val
 };
 
 const confirmDownload = () => {
@@ -177,14 +181,14 @@ const checkFunc = (item) => {
   console.log('Checked Item ', count.value)
 };
 
-const downloadNormalVersion = () => {
-  downloadImage(props.fullImageSrc);
+const downloadNormalVersion = (val) => {
+  downloadImage(val);
   closeModal();
 };
 
-const downloadBothVersions = () => {
-  downloadImage(props.fullImageSrc);
-  downloadGrayscaleImage(props.fullImageSrc);
+const downloadBothVersions = (val) => {
+  downloadImage(val);
+  downloadGrayscaleImage(val);
   closeModal();
 };
 
@@ -278,8 +282,9 @@ const downloadSelectedImage = (image, filename) => {
 
 const downloadImage = (url) => {
   const link = document.createElement('a');
-  link.href = url;
-  link.download = url.split('/').pop();
+  link.href = url.photo_url;
+  // link.download = url.photo_url.split('/').pop();
+  link.download = url.name;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -288,7 +293,7 @@ const downloadImage = (url) => {
 const downloadGrayscaleImage = (url) => {
   const img = new Image();
   img.crossOrigin = 'Anonymous';
-  img.src = url;
+  img.src = url.photo_url
   img.onload = () => {
     const canvas = document.createElement('canvas');
     canvas.width = img.width;
@@ -311,7 +316,8 @@ const downloadGrayscaleImage = (url) => {
     canvas.toBlob((blob) => {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'grayscale_' + url.split('/').pop();
+      // link.download = 'grayscale_' + url.split('/').pop();
+      link.download = 'grayscale_' + url.name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
