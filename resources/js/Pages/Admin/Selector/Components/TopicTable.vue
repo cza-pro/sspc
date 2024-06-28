@@ -91,6 +91,11 @@ const closeRemove = () => {
   propsData();
   photoRemoveModal.value = false;
 };
+const photoRemoveFunc = () => {
+  photoRemoveModal.value = true
+  toRemoveItem.value = [];
+  propsData();
+}
 const propsData = () => {
   props.topics.forEach(item => {
     if (item.available == 'off') {
@@ -122,7 +127,7 @@ const lblToRemoveFunc = (val) => {
     </div>
     <div class="filter-right">
       <p class="addnewtag" @click="addNewLabel = true">新增標籤</p>
-      <p class="closetag" @click="photoRemoveModal = true">關閉標籤</p>
+      <p class="closetag" @click="photoRemoveFunc()">關閉標籤</p>
     </div>
   </div>
   <div v-if="addNewLabel" class="modal">
