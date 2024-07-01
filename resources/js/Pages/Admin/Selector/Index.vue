@@ -81,29 +81,34 @@ const grade = ref('')
           </CardBox>
         </div>
   </SectionMain> -->
-
-  <div class="photo-content">
-    <div class="left-content">
-      <PictureCollection currentActive="editFilter" />
+  <div class="parent-content">
+    <div class="logout-block">
+      <img src="/images/logout-img.png" alt="Logout" class="logout-img">
+      <span class="logout-css">登出</span>
     </div>
-    <div class="right-content">
-      <div>
-
-        <SubjectTable
-          :subjects="props.subjects"
-        />
-        <GradeTable
-          :grades="props.grades"
-        />
-        <TopicTable
-          :topics="props.topics"
-        />
-        <PhotoTypeTable
-          :photo_types="props.photo_types"
-        />
+    <div class="photo-content">
+      <div class="left-content">
+        <PictureCollection currentActive="editFilter" />
       </div>
-    </div>
+      <div class="right-content">
+        <div>
 
+          <SubjectTable
+            :subjects="props.subjects"
+          />
+          <GradeTable
+            :grades="props.grades"
+          />
+          <TopicTable
+            :topics="props.topics"
+          />
+          <PhotoTypeTable
+            :photo_types="props.photo_types"
+          />
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </template>
@@ -136,184 +141,186 @@ const grade = ref('')
   }
 </style>
 <style lang="scss" scoped>
-  .photo-content {
-    display: flex;
+  .parent-content {
     max-width: 1200px;
     margin: 4rem auto;
-    .left-content {
-      width: 250px;
-      margin-right: 2rem;
-    }
-    .right-content {
-      width: calc(100% - 200px);
-      .btn-div {
-        display: flex;
-        justify-content: end;
-        .btn-css {
+    .photo-content {
+      display: flex;
+      .left-content {
+        width: 250px;
+        margin-right: 2rem;
+      }
+      .right-content {
+        width: calc(100% - 200px);
+        .btn-div {
           display: flex;
-          align-items: center;
-          padding: 10px 1rem;
-          background: #FF7652;
-          border-radius: 6px;
-          cursor: pointer;
-          .upload-img {
-            width: 26px;
-          }
-          .upload-txt {
-            margin-left: 1rem;
-            font-weight: 700;
-            font-size: 16px;
-            color: #FFF;
+          justify-content: end;
+          .btn-css {
+            display: flex;
+            align-items: center;
+            padding: 10px 1rem;
+            background: #FF7652;
+            border-radius: 6px;
+            cursor: pointer;
+            .upload-img {
+              width: 26px;
+            }
+            .upload-txt {
+              margin-left: 1rem;
+              font-weight: 700;
+              font-size: 16px;
+              color: #FFF;
+            }
           }
         }
-      }
-      .each-block {
-        border: 1px solid #D7D7D7;
-        margin-top: 10px;
-        padding: 1rem;
-        .first-row {
-          display: flex;
-          justify-content: space-between;
-          padding-bottom: 1rem;
-          .datetime-css {
-            font-weight: 400;
-            font-size: 16px;
-            color: #FA9559;
-          }
-          .available-css {
+        .each-block {
+          border: 1px solid #D7D7D7;
+          margin-top: 10px;
+          padding: 1rem;
+          .first-row {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            .green-circle {
-              width: 12px;
-              height: 12px;
-              border-radius: 6px;
-              background: #2CEE28;
-            }
-            .available-txt {
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            .datetime-css {
               font-weight: 400;
               font-size: 16px;
-              color: #000;
-              margin-left: 7px;
+              color: #FA9559;
+            }
+            .available-css {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              .green-circle {
+                width: 12px;
+                height: 12px;
+                border-radius: 6px;
+                background: #2CEE28;
+              }
+              .available-txt {
+                font-weight: 400;
+                font-size: 16px;
+                color: #000;
+                margin-left: 7px;
+              }
             }
           }
+          .photo-row {
+            display: flex;
+            justify-content: space-between;
+          }
+          .photo-left {
+            display: flex;
+            .imagecss {
+              width: 148px;
+            }
+            .photoright-content {
+              width: 100%;
+              padding-left: 1rem;
+              .photo-info {
+                font-weight: 400;
+                font-size: 1rem;
+                color: #392F26;
+                line-height: 1.3;
+              }
+            }
+          }
+          .row-data {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            .btn-row {
+              display: flex;
+            }
+            .btn-one, .btn-two, .btn-three {
+              font-weight: 400;
+              font-size: 1rem;
+              color: #FFF;
+              border-radius: 6px;
+              padding: 3px 1rem;
+              margin-left: 1rem;
+              cursor: pointer;
+              background: #F294A5;
+            }
+            .btn-one {
+              background: #2BCF32;
+            }
+          }
+
+
         }
-        .photo-row {
+        .filter-block {
+          background: #FFD6A7;
           display: flex;
           justify-content: space-between;
-        }
-        .photo-left {
-          display: flex;
-          .imagecss {
-            width: 148px;
-          }
-          .photoright-content {
+          min-height: 160px;
+          margin-bottom: 1rem;
+          .filter-left {
+            padding: 1rem 0 0;
             width: 100%;
-            padding-left: 1rem;
-            .photo-info {
-              font-weight: 400;
-              font-size: 1rem;
-              color: #392F26;
-              line-height: 1.3;
-            }
-          }
-        }
-        .row-data {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          .btn-row {
-            display: flex;
-          }
-          .btn-one, .btn-two, .btn-three {
-            font-weight: 400;
-            font-size: 1rem;
-            color: #FFF;
-            border-radius: 6px;
-            padding: 3px 1rem;
-            margin-left: 1rem;
-            cursor: pointer;
-            background: #F294A5;
-          }
-          .btn-one {
-            background: #2BCF32;
-          }
-        }
-
-
-      }
-      .filter-block {
-        background: #FFD6A7;
-        display: flex;
-        justify-content: space-between;
-        min-height: 160px;
-        margin-bottom: 1rem;
-        .filter-left {
-          padding: 1rem 0 0;
-          width: 100%;
-          border-right: 1px solid #FFF;
-          .subject-section {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #000;
-            padding: 0 1rem;
-            margin-bottom: 1rem;
-          }
-          .subject-btns {
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            .each-btn {
-              font-weight: 400;
+            border-right: 1px solid #FFF;
+            .subject-section {
+              font-weight: 700;
               font-size: 1rem;
               color: #000;
-              background: #FFF;
-              padding: 6px 0;
-              border-radius: 12px;
-              width: 100px;
-              width: calc((100% - 7rem) / 6);
-              text-align: center;
-              margin-left: 8px;
-              margin-right: 8px;
+              padding: 0 1rem;
               margin-bottom: 1rem;
             }
-            .each-btn:nth-child(6n) {
-              margin-right: 1rem;
-            }
-            .each-btn:nth-child(6n+1) {
-              margin-left: 1rem;
-            }
-            .removeitem {
-              color: #EAEAEA;
-              background: #C1C1C1;
+            .subject-btns {
+              display: flex;
+              justify-content: flex-start;
+              flex-wrap: wrap;
+              .each-btn {
+                font-weight: 400;
+                font-size: 1rem;
+                color: #000;
+                background: #FFF;
+                padding: 6px 0;
+                border-radius: 12px;
+                width: 100px;
+                width: calc((100% - 7rem) / 6);
+                text-align: center;
+                margin-left: 8px;
+                margin-right: 8px;
+                margin-bottom: 1rem;
+              }
+              .each-btn:nth-child(6n) {
+                margin-right: 1rem;
+              }
+              .each-btn:nth-child(6n+1) {
+                margin-left: 1rem;
+              }
+              .removeitem {
+                color: #EAEAEA;
+                background: #C1C1C1;
+              }
             }
           }
-        }
-        .filter-right {
-          width: 112px;
-          padding: 0 12px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-evenly;
-          .addnewtag {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #FFF;
-            padding: 7px;
-            border-radius: 6px;
-            text-align: center;
-            background: #000;
-            cursor: pointer;
-          }
-          .closetag {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #FFF;
-            padding: 7px;
-            border-radius: 6px;
-            text-align: center;
-            background: #FF5454;
-            cursor: pointer;
+          .filter-right {
+            width: 112px;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            .addnewtag {
+              font-weight: 700;
+              font-size: 1rem;
+              color: #FFF;
+              padding: 7px;
+              border-radius: 6px;
+              text-align: center;
+              background: #000;
+              cursor: pointer;
+            }
+            .closetag {
+              font-weight: 700;
+              font-size: 1rem;
+              color: #FFF;
+              padding: 7px;
+              border-radius: 6px;
+              text-align: center;
+              background: #FF5454;
+              cursor: pointer;
+            }
           }
         }
       }

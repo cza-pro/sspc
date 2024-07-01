@@ -286,3 +286,25 @@ i.el-collapse-item__arrow.el-icon-arrow-right.is-active:before {
 .custom-checkbox .el-checkbox__input {
     order: 2; /* Change the order of the input */
 }
+
+.logout-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #CFCFCF;
+    width: 100px;
+    height: 36px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+.logout-img {
+    width: 26px;
+    height: 26px;
+}
+.logout-css {
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFF;
+    margin-left: 7px;
+}
