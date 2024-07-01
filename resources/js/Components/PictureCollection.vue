@@ -43,7 +43,7 @@ const manageFunc = (val) => {
     </div>
   </div>
 </template>
-<style lang="scss" scopee>
+<style lang="scss" scoped>
   .picture-collection {
     border: 1px solid #D7D7D7;
     padding: 1rem;

@@ -128,7 +128,7 @@ const deleteFeatureImageFunc = (feature_image) => {
             <p class="datetime-css">建立日期({{moment(String(feature_img.created_at)).format('YYYY/MM/DD/hh:mm')}})</p>
             <div class="available-css">
             <div :class="feature_img.public === 'on' ? 'green-circle' : 'grey-circle'"></div>
-            <p v-if="photo.public === 'on'" class="available-txt">上架中</p>
+            <p v-if="feature_img.public === 'on'" class="available-txt">上架中</p>
             <p v-else class="available-txt">下架</p>
             </div>
         </div>
